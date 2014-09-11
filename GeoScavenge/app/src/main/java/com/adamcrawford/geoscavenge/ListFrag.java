@@ -7,6 +7,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+
+import com.adamcrawford.geoscavenge.hunt.HuntAdapter;
+import com.adamcrawford.geoscavenge.hunt.HuntConstructor;
+
+import java.util.ArrayList;
 
 
 /**
@@ -17,7 +23,19 @@ import android.view.ViewGroup;
  * Purpose: TODO Minimum 2 sentence description
  */
 public class ListFrag extends ListFragment {
+
+    private ArrayList<HuntConstructor> huntList;
+
     public ListFrag() {
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        HuntAdapter adapter = new HuntAdapter(getActivity(), R.layout.item_hunt, huntList);
+
+        setListAdapter(adapter);
     }
 
     @Override
