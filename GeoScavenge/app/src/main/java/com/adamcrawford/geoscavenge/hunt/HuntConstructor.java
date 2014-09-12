@@ -24,16 +24,20 @@ public class HuntConstructor implements Serializable {
     public double huntLon;
     public String  huntImg;
     public String huntEndDesc;
+    public int huntID;
+    public int huntGuesses;
 
     public HuntConstructor (JSONObject object) {
 
         Log.i(TAG, object.toString());
 
         try {
+            this.huntID = object.getInt("id");
             this.huntName = object.getString("name");
             this.huntDesc = object.getString("desc");
             this.huntLat = object.getDouble("lat");
             this.huntLon = object.getDouble("lon");
+            this.huntGuesses = object.getInt("guesses");
             this.huntEndDesc = object.getString("endDesc");
             this.huntImg = object.getString("imgPath");
             Log.i(TAG, huntImg);
