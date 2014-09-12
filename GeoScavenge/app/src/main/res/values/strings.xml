@@ -2,4 +2,6 @@
     <string name="app_name">GeoScavenge</string>
     <string name="action_search">Private Hunt Search</string>
     <string name="action_add">Add New Hunt</string>
+    <string name="huntName">HuntName</string>
+    <string name="huntDesc">HuntDesc</string>
 </resources>

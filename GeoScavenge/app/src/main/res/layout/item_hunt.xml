@@ -7,10 +7,17 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/huntName"/>
+        android:id="@+id/huntName"
+        android:layout_marginBottom="5dp"
+        android:text="@string/huntName"
+        android:textAppearance="?android:textAppearanceMedium"
+    />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/huntDesc"/>
+        android:id="@+id/huntDesc"
+        android:layout_marginBottom="10dp"
+        android:text="@string/huntDesc"
+    />
 
 </LinearLayout>

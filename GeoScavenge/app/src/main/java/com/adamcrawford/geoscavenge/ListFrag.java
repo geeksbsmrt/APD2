@@ -53,8 +53,18 @@ public class ListFrag extends ListFragment {
             JSONObject hunt2 = new JSONObject();
             hunt1.put("name","Hunt1");
             hunt1.put("desc", "Hunt for buried treasure");
+            hunt1.put("lat", 28.596597);
+            hunt1.put("lon", -81.301316);
+            hunt1.put("endDesc", "Get your degree and you will have the opportunity for endless wealth!");
+            //This may not be correct.  It will be tested for Milestone 2
+            hunt1.put("imgPath", String.valueOf(R.drawable.fsu));
             hunt2.put("name", "Hunt2");
             hunt2.put("desc", "Find the love of your life");
+            hunt2.put("lat", 28.419791);
+            hunt2.put("lon", 81.581187);
+            hunt2.put("endDesc", "Dance with the Princes and Princesses, watch stunning fireworks, become entranced with that special someone.");
+            //This may not be correct.  It will be tested for Milestone 2
+            hunt2.put("imgPath", String.valueOf(R.drawable.castle));
             huntArray.put(hunt1).put(hunt2);
             huntJSON.put("hunts", huntArray);
         } catch (JSONException e) {

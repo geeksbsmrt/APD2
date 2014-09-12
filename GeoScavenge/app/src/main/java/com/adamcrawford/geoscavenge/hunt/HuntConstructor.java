@@ -1,5 +1,6 @@
 package com.adamcrawford.geoscavenge.hunt;
 
+import android.media.Image;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -20,6 +21,10 @@ public class HuntConstructor implements Serializable {
 
     public String huntName;
     public String huntDesc;
+    public double huntLat;
+    public double huntLon;
+    public String  huntImg;
+    public String huntEndDesc;
 
     public HuntConstructor (JSONObject object) {
 
@@ -28,9 +33,13 @@ public class HuntConstructor implements Serializable {
         try {
             this.huntName = object.getString("name");
             this.huntDesc = object.getString("desc");
+            this.huntLat = object.getDouble("lat");
+            this.huntLon = object.getDouble("lon");
+            this.huntEndDesc = object.getString("endDesc");
+            this.huntImg = object.getString("imgPath");
+            Log.i(TAG, huntImg);
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
         }
     }
-
 }
