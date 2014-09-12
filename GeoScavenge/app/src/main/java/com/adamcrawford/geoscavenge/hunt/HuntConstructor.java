@@ -1,6 +1,5 @@
 package com.adamcrawford.geoscavenge.hunt;
 
-import android.media.Image;
 import android.util.Log;
 
 import org.json.JSONException;
