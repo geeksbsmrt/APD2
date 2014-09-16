@@ -6,8 +6,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.adamcrawford.geoscavenge.hunt.HuntAdapter;
 import com.adamcrawford.geoscavenge.hunt.HuntConstructor;
@@ -110,4 +112,36 @@ public class ListFrag extends ListFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.main, menu);
         super.onCreateOptionsMenu(menu,inflater);
-    }}
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case R.id.action_add: {
+                //To Add Activity
+                Log.i(TAG, "Launching Add Activity");
+
+                return true;
+            }
+
+            case R.id.action_search: {
+                //search
+                Log.i(TAG, "Search Action Item pressed");
+                Dialogs dialog = Dialogs.newInstance(Dialogs.DialogType.SEARCH);
+                dialog.show(getFragmentManager(), "search");
+                return true;
+            }
+
+            default: {
+                return super.onOptionsItemSelected(item);
+            }
+        }
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+    }
+}

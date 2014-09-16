@@ -4,4 +4,9 @@
     <string name="action_add">Add New Hunt</string>
     <string name="huntName">HuntName</string>
     <string name="huntDesc">HuntDesc</string>
+    <string name="privNum">Private Hunt Number</string>
+    <string name="search">Search</string>
+    <string name="cancel">Cancel</string>
+    <string name="huntDetails">Hunt Details</string>
+    <string name="start">Start Hunt</string>
 </resources>
