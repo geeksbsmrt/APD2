@@ -1,4 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">GeoScavenge</string>
     <string name="action_search">Private Hunt Search</string>
     <string name="action_add">Add New Hunt</string>
@@ -9,4 +11,10 @@
     <string name="cancel">Cancel</string>
     <string name="huntDetails">Hunt Details</string>
     <string name="start">Start Hunt</string>
+    <string name="title_activity_guess">Guess Location</string>
+    <string name="currentGuess">Current Guess:</string>
+    <string name="pastGuess">Past Guess:</string>
+    <string name="guessesRemain">Remaining Guesses:</string>
+    <string name="guessBtnDesc">Guess Button</string>
+
 </resources>
