@@ -4,12 +4,15 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.adamcrawford.geoscavenge.hunt.HuntConstructor;
 
 /**
  * Author:  Adam Crawford
@@ -41,7 +44,7 @@ public class Dialogs extends DialogFragment {
 
         switch (type){
             case DETAILS: {
-                Bundle args = getArguments();
+                final Bundle args = getArguments();
                 View view = inflater.inflate(R.layout.fragment_details, null);
                 TextView details = (TextView) view.findViewById(R.id.huntDetails);
                 details.setText(args.getString("test"));
@@ -49,7 +52,8 @@ public class Dialogs extends DialogFragment {
                        .setPositiveButton(R.string.start, new DialogInterface.OnClickListener() {
                            @Override
                            public void onClick(DialogInterface dialogInterface, int i) {
-
+                               HuntConstructor hunt = (HuntConstructor) args.getSerializable("hunt");
+                               MainActivity.startHunt(hunt);
                            }
                        })
                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -89,15 +93,6 @@ public class Dialogs extends DialogFragment {
     }
 
     private void searchHunts (String query) {
-        Log.i(TAG, "Searching Hunts");
-
-        //TODO Search based on Query
-
-        Dialogs dialog = Dialogs.newInstance(DialogType.DETAILS);
-        Bundle args = new Bundle();
-        args.putString("test", "test1");
-        dialog.setArguments(args);
-        dialog.show(getFragmentManager(), "details");
-
+        MainActivity.searchHunts(query);
     }
 }

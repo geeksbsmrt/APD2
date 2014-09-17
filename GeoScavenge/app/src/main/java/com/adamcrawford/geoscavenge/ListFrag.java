@@ -1,5 +1,6 @@
 package com.adamcrawford.geoscavenge;
 
+import android.app.Activity;
 import android.app.ListFragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,10 +34,31 @@ public class ListFrag extends ListFragment {
     String TAG = "LF";
 
     JSONObject huntJSON = new JSONObject();
+    public JSONArray huntArray = new JSONArray();
+    public JSONObject hunt1 = new JSONObject();
+    public JSONObject hunt2 = new JSONObject();
 
     private ArrayList<HuntConstructor> huntList;
+    private OnHuntSelected parentActivity;
 
     public ListFrag() {
+    }
+
+    public interface OnHuntSelected {
+        void onHuntSelected(HuntConstructor hunt);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (activity instanceof OnHuntSelected) {
+            try {
+                parentActivity = (OnHuntSelected) activity;
+            } catch (ClassCastException e) {
+                throw new ClassCastException(activity.toString()
+                        + " must implement OnToonSelected");
+            }
+        }
     }
 
     @Override
@@ -49,9 +71,7 @@ public class ListFrag extends ListFragment {
         try {
 
             Log.i(TAG, "building data");
-            JSONArray huntArray = new JSONArray();
-            JSONObject hunt1 = new JSONObject();
-            JSONObject hunt2 = new JSONObject();
+
             hunt1.put("id", 1);
             hunt1.put("name","Hunt1");
             hunt1.put("desc", "Hunt for buried treasure");
@@ -141,7 +161,8 @@ public class ListFrag extends ListFragment {
     }
 
     @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
+    public void onListItemClick(ListView list, View view, int i, long id) {
+        HuntConstructor hunt = (HuntConstructor) list.getItemAtPosition(i);
+        parentActivity.onHuntSelected(hunt);
     }
 }

@@ -81,14 +81,19 @@
 
     </LinearLayout>
 
-    <ImageButton
+    <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/guessButton"
-        android:src="@drawable/guess"
-        android:layout_gravity="center_horizontal"
-        style="?android:attr/borderlessButtonStyle"
-        android:contentDescription="@string/guessBtnDesc"
-     />
+        android:layout_height="fill_parent">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/guessButton"
+            android:src="@drawable/guess"
+            android:layout_centerInParent="true"
+            style="?android:attr/borderlessButtonStyle"
+            android:contentDescription="@string/guessBtnDesc"
+         />
+     </RelativeLayout>
 
 </LinearLayout>
