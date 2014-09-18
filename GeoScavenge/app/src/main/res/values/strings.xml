@@ -21,5 +21,7 @@
     <string name="mile">mile</string>
     <string name="guesses">guesses</string>
     <string name="locFound">Location Found</string>
+    <string name="title_activity_new_hunt">New Hunt</string>
+    <string name="save">Save</string>
 
 </resources>

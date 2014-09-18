@@ -2,6 +2,7 @@ package com.adamcrawford.geoscavenge;
 
 import android.app.Activity;
 import android.app.ListFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +15,9 @@ import android.widget.ListView;
 
 import com.adamcrawford.geoscavenge.hunt.HuntAdapter;
 import com.adamcrawford.geoscavenge.hunt.HuntConstructor;
+import com.adamcrawford.geoscavenge.hunt.NewHuntActivity;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -100,7 +103,7 @@ public class ListFrag extends ListFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View listView = inflater.inflate(R.layout.fragment_main, container, false);
         setHasOptionsMenu(true);
         return listView;
@@ -120,7 +123,8 @@ public class ListFrag extends ListFragment {
             case R.id.action_add: {
                 //To Add Activity
                 Log.i(TAG, "Launching Add Activity");
-
+                Intent nIntent = new Intent(getActivity(), NewHuntActivity.class);
+                startActivity(nIntent);
                 return true;
             }
 
