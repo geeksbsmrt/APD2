@@ -35,10 +35,7 @@ public class ListFrag extends ListFragment {
 
     JSONObject huntJSON = new JSONObject();
     public JSONArray huntArray = new JSONArray();
-    public JSONObject hunt1 = new JSONObject();
-    public JSONObject hunt2 = new JSONObject();
 
-    private ArrayList<HuntConstructor> huntList;
     private OnHuntSelected parentActivity;
 
     public ListFrag() {
@@ -65,32 +62,13 @@ public class ListFrag extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        huntList = new ArrayList<HuntConstructor>();
+        ArrayList<HuntConstructor> huntList = new ArrayList<HuntConstructor>();
 
         //This will be replaced by Network Data in future release
         try {
 
             Log.i(TAG, "building data");
-
-            hunt1.put("id", 1);
-            hunt1.put("name","Hunt1");
-            hunt1.put("desc", "Hunt for buried treasure");
-            hunt1.put("lat", 28.596597);
-            hunt1.put("lon", -81.301316);
-            hunt1.put("guesses", 50);
-            hunt1.put("endDesc", "Get your degree and you will have the opportunity for endless wealth!");
-            //This may not be correct.  It will be tested for Milestone 2
-            hunt1.put("imgPath", String.valueOf(R.drawable.fsu));
-            hunt2.put("id", 2);
-            hunt2.put("name", "Hunt2");
-            hunt2.put("desc", "Find the love of your life");
-            hunt2.put("lat", 28.419791);
-            hunt2.put("lon", 81.581187);
-            hunt2.put("guesses", 100);
-            hunt2.put("endDesc", "Dance with the Princes and Princesses, watch stunning fireworks, become entranced with that special someone.");
-            //This may not be correct.  It will be tested for Milestone 2
-            hunt2.put("imgPath", String.valueOf(R.drawable.castle));
-            huntArray.put(hunt1).put(hunt2);
+            huntArray.put(MainActivity.hunt1).put(MainActivity.hunt2);
             huntJSON.put("hunts", huntArray);
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());

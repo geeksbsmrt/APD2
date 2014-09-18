@@ -185,6 +185,8 @@ public class GuessActivity extends Activity implements LocationListener {
                 } else if (dist == 1609.34) {
                     dist = 1;
                     measure = getString(R.string.mile);
+                } else if (dist <= 5){
+                    //Location found
                 }
 
                 String test = String.format("%.2f %s", dist, measure);

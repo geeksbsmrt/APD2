@@ -19,5 +19,6 @@
     <string name="meters">meters</string>
     <string name="miles">miles</string>
     <string name="mile">mile</string>
+    <string name="guesses">guesses</string>
 
 </resources>

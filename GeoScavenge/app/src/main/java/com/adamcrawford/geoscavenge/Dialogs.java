@@ -12,8 +12,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.adamcrawford.geoscavenge.hunt.HuntConstructor;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -50,9 +48,16 @@ public class Dialogs extends DialogFragment {
                 final Bundle args = getArguments();
                 View view = inflater.inflate(R.layout.fragment_details, null);
                 TextView details = (TextView) view.findViewById(R.id.huntDetails);
-                details.setText(args.getString("test"));
+                TextView guesses = (TextView) view.findViewById(R.id.detailGuesses);
+                try {
+                    JSONObject hunt = new JSONObject(args.getString("hunt"));
+                    details.setText(hunt.getString("desc"));
+                    guesses.setText(hunt.getString("guesses") + " " + getString(R.string.guesses));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 builder.setView(view)
-                       .setPositiveButton(R.string.start, new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.start, new DialogInterface.OnClickListener() {
                            @Override
                            public void onClick(DialogInterface dialogInterface, int i) {
                                Intent gIntent = new Intent(getActivity() ,GuessActivity.class);
@@ -78,7 +83,7 @@ public class Dialogs extends DialogFragment {
                                 Dialog dialog = Dialogs.this.getDialog();
                                 EditText input = (EditText) dialog.findViewById(R.id.searchInput);
                                 String query = input.getText().toString();
-                                searchHunts(query);
+                                MainActivity.searchHunts(query);
                             }
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -94,9 +99,5 @@ public class Dialogs extends DialogFragment {
             }
         }
         return builder.create();
-    }
-
-    private void searchHunts (String query) {
-        MainActivity.searchHunts(query);
     }
 }
