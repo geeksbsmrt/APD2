@@ -26,5 +26,13 @@
     <string name="priv">Make Private</string>
     <string name="addEnd">Add Endpoint</string>
     <string name="numEnds">Number of Endpoints: </string>
+    <string name="title_activity_new_endpoint">New Endpoint</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="current">Use current location</string>
+    <string name="address">Search by address</string>
+    <string name="addEndDesc">Manually enter location or use a button below to determine automatically.</string>
+    <string name="addPic">Add picture (optional)</string>
+    <string name="endDesc">Description of Endpoint</string>
 
 </resources>

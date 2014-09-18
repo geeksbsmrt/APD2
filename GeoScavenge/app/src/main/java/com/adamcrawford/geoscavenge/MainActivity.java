@@ -3,7 +3,6 @@ package com.adamcrawford.geoscavenge;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -73,21 +72,19 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
         startHunt(hunt);
     }
 
-    public static void startHunt(HuntConstructor hunt) {
-        Intent gIntent = new Intent(sContext, GuessActivity.class);
-        gIntent.putExtra("hunt", hunt);
-        MainActivity.sContext.startActivity(gIntent);
-    }
-
     public static void searchHunts(String query) {
         Log.i(TAG, "Searching Hunts");
 
         //TODO Search based on Query
+        HuntConstructor hunt = new HuntConstructor(hunt1);
+        startHunt(hunt);
+    }
 
+    static void startHunt(HuntConstructor hunt) {
         Dialogs dialog = Dialogs.newInstance(Dialogs.DialogType.DETAILS);
         Bundle args = new Bundle();
 
-        args.putString("hunt", hunt1.toString());
+        args.putSerializable("hunt", hunt);
         dialog.setArguments(args);
         dialog.show(sFragManager, "details");
     }

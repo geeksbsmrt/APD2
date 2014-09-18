@@ -2,11 +2,13 @@ package com.adamcrawford.geoscavenge;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +17,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.adamcrawford.geoscavenge.hunt.HuntConstructor;
 
 
 public class GuessActivity extends Activity implements LocationListener {
@@ -25,12 +26,14 @@ public class GuessActivity extends Activity implements LocationListener {
     static LocationManager lManager;
     static Criteria criteria;
     static String TAG = "GA";
+    static HuntConstructor hunt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guess);
         extras = getIntent().getExtras();
+        hunt = (HuntConstructor) extras.get("hunt");
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
@@ -40,20 +43,12 @@ public class GuessActivity extends Activity implements LocationListener {
     }
 
     public static Float getDist(){
-        Float dist = Float.valueOf(-1);
-        JSONObject hunt;
-        try {
-            hunt = new JSONObject(extras.getString("hunt"));
-            double lat = hunt.getDouble("lat");
-            double lon = hunt.getDouble("lon");
-            Location loc = lManager.getLastKnownLocation(lManager.getBestProvider(criteria, false));
-            Location target = new Location("target");
-            target.setLatitude(lat);
-            target.setLongitude(lon);
-            dist = loc.distanceTo(target);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+
+        Location loc = lManager.getLastKnownLocation(lManager.getBestProvider(criteria, false));
+        Location target = new Location("target");
+        target.setLatitude(hunt.huntLat);
+        target.setLongitude(hunt.huntLon);
+        Float dist = loc.distanceTo(target);
         Log.i(TAG, String.valueOf(dist));
         return dist;
     }
@@ -123,6 +118,12 @@ public class GuessActivity extends Activity implements LocationListener {
     protected void onResume() {
         lManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
 
+        if(!(lManager.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER)))
+        {
+            Intent myIntent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS );
+            startActivity(myIntent);
+        }
+
         criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_FINE);
 
@@ -157,20 +158,14 @@ public class GuessActivity extends Activity implements LocationListener {
             ImageButton gButton = (ImageButton) rootView.findViewById(R.id.guessButton);
             gButton.setOnClickListener(this);
 
-
-            JSONObject hunt;
-            try {
-                hunt = new JSONObject(extras.getString("hunt"));
-                gRemain.setText(hunt.getString("guesses"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            gRemain.setText(String.valueOf(hunt.huntGuesses));
 
             return rootView;
         }
 
         @Override
         public void onClick(View view) {
+
             Integer i = Integer.parseInt(gRemain.getText().toString());
             if (i > 0) {
                 float dist = GuessActivity.getDist();

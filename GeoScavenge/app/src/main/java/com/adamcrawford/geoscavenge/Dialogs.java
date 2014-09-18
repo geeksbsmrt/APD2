@@ -12,8 +12,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.adamcrawford.geoscavenge.hunt.HuntConstructor;
 
 /**
  * Author:  Adam Crawford
@@ -50,19 +49,15 @@ public class Dialogs extends DialogFragment {
                 View view = inflater.inflate(R.layout.fragment_details, null);
                 TextView details = (TextView) view.findViewById(R.id.huntDetails);
                 TextView guesses = (TextView) view.findViewById(R.id.detailGuesses);
-                try {
-                    JSONObject hunt = new JSONObject(args.getString("hunt"));
-                    details.setText(hunt.getString("desc"));
-                    guesses.setText(hunt.getString("guesses") + " " + getString(R.string.guesses));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                final HuntConstructor hunt = (HuntConstructor) args.getSerializable("hunt");
+                details.setText(hunt.huntDesc);
+                guesses.setText(hunt.huntGuesses + " " + getString(R.string.guesses));
                 builder.setView(view)
                         .setPositiveButton(R.string.start, new DialogInterface.OnClickListener() {
                            @Override
                            public void onClick(DialogInterface dialogInterface, int i) {
                                Intent gIntent = new Intent(getActivity() ,GuessActivity.class);
-                               gIntent.putExtra("hunt", args.getString("hunt"));
+                               gIntent.putExtra("hunt", hunt);
                                startActivity(gIntent);
                            }
                        })
