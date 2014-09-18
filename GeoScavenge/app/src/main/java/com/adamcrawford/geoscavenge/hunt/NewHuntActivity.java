@@ -1,5 +1,6 @@
 package com.adamcrawford.geoscavenge.hunt;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.adamcrawford.geoscavenge.R;
 
@@ -25,10 +27,9 @@ public class NewHuntActivity extends Activity {
         }
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class NewHuntFragment extends Fragment {
+    public static class NewHuntFragment extends Fragment implements View.OnClickListener {
+
+        ImageButton addEndButton;
 
         public NewHuntFragment() {
         }
@@ -38,6 +39,12 @@ public class NewHuntActivity extends Activity {
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_new_hunt, container, false);
             setHasOptionsMenu(true);
+            ActionBar actionBar = getActivity().getActionBar();
+            actionBar.setHomeButtonEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+
+            addEndButton = (ImageButton) rootView.findViewById(R.id.addEndButton);
+            addEndButton.setOnClickListener(this);
             return rootView;
         }
         @Override
@@ -48,8 +55,20 @@ public class NewHuntActivity extends Activity {
 
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {
+            switch (item.getItemId()){
+                case R.id.addEndButton: {
 
-            return true;
+                    return true;
+                }
+                default: {
+                    return false;
+                }
+            }
+        }
+
+        @Override
+        public void onClick(View view) {
+
         }
     }
 }
