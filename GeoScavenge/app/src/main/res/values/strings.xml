@@ -12,9 +12,12 @@
     <string name="huntDetails">Hunt Details</string>
     <string name="start">Start Hunt</string>
     <string name="title_activity_guess">Guess Location</string>
-    <string name="currentGuess">Current Guess:</string>
-    <string name="pastGuess">Past Guess:</string>
+    <string name="currentGuess">Current Distance:</string>
+    <string name="pastGuess">Past Distance:</string>
     <string name="guessesRemain">Remaining Guesses:</string>
     <string name="guessBtnDesc">Guess Button</string>
+    <string name="meters">meters</string>
+    <string name="miles">miles</string>
+    <string name="mile">mile</string>
 
 </resources>

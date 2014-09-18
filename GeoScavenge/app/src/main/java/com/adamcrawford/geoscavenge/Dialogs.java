@@ -14,6 +14,9 @@ import android.widget.TextView;
 
 import com.adamcrawford.geoscavenge.hunt.HuntConstructor;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Author:  Adam Crawford
  * Project: GeoScavenge
@@ -52,8 +55,9 @@ public class Dialogs extends DialogFragment {
                        .setPositiveButton(R.string.start, new DialogInterface.OnClickListener() {
                            @Override
                            public void onClick(DialogInterface dialogInterface, int i) {
-                               HuntConstructor hunt = (HuntConstructor) args.getSerializable("hunt");
-                               MainActivity.startHunt(hunt);
+                               Intent gIntent = new Intent(getActivity() ,GuessActivity.class);
+                               gIntent.putExtra("hunt", args.getString("hunt"));
+                               startActivity(gIntent);
                            }
                        })
                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
