@@ -182,7 +182,8 @@ public class GuessActivity extends Activity implements LocationListener {
                     dist = 1;
                     measure = getString(R.string.mile);
                 } else if (dist <= 5){
-                    //Location found
+                    Dialogs dialog = Dialogs.newInstance(Dialogs.DialogType.FOUND);
+                    dialog.show(MainActivity.sFragManager, "found");
                 }
 
                 String test = String.format("%.2f %s", dist, measure);

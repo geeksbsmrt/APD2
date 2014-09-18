@@ -28,7 +28,8 @@ public class Dialogs extends DialogFragment {
     public static DialogType type;
     public enum DialogType {
         DETAILS,
-        SEARCH
+        SEARCH,
+        FOUND
     }
 
     public Dialogs() {}
@@ -92,6 +93,13 @@ public class Dialogs extends DialogFragment {
                                 Dialogs.this.getDialog().cancel();
                             }
                         }).setTitle(R.string.action_search);
+                break;
+            }
+            case FOUND: {
+                Log.i(TAG, "Found");
+                builder.setView(inflater.inflate(R.layout.fragment_found, null))
+                       .setTitle(R.string.locFound);
+                //TODO Implement logic to determine if last endpoint create buttons accordingly
                 break;
             }
             default: {

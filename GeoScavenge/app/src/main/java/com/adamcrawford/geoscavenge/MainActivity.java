@@ -18,7 +18,7 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
 
     static String TAG = "MA";
     static Context sContext;
-    static FragmentManager sFragManager;
+    public static FragmentManager sFragManager;
     public static JSONObject hunt1 = new JSONObject();
     public static JSONObject hunt2 = new JSONObject();
 
