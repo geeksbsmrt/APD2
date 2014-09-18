@@ -25,5 +25,6 @@
     <string name="save">Save</string>
     <string name="priv">Make Private</string>
     <string name="addEnd">Add Endpoint</string>
+    <string name="numEnds">Number of Endpoints: </string>
 
 </resources>
