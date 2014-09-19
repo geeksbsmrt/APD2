@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -56,8 +57,12 @@ public class Dialogs extends DialogFragment {
                         .setPositiveButton(R.string.start, new DialogInterface.OnClickListener() {
                            @Override
                            public void onClick(DialogInterface dialogInterface, int i) {
-                               Intent gIntent = new Intent(getActivity() ,GuessActivity.class);
+                               Intent gIntent = new Intent(getActivity(), GuessActivity.class);
                                gIntent.putExtra("hunt", hunt);
+                               SharedPreferences.Editor edit = MainActivity.preferences.edit();
+                               edit.putInt("currentHunt", hunt.huntID);
+                               Log.i(TAG, String .valueOf(hunt.huntID));
+                               edit.apply();
                                startActivity(gIntent);
                            }
                        })
@@ -78,7 +83,7 @@ public class Dialogs extends DialogFragment {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 Dialog dialog = Dialogs.this.getDialog();
                                 EditText input = (EditText) dialog.findViewById(R.id.searchInput);
-                                String query = input.getText().toString();
+                                Integer query = Integer.parseInt(input.getText().toString());
                                 MainActivity.searchHunts(query);
                             }
                         })

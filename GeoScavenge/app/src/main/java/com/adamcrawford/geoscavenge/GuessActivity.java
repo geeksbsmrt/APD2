@@ -3,6 +3,7 @@ package com.adamcrawford.geoscavenge;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -27,6 +28,7 @@ public class GuessActivity extends Activity implements LocationListener {
     static Criteria criteria;
     static String TAG = "GA";
     static HuntConstructor hunt;
+    static Integer guesses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,9 @@ public class GuessActivity extends Activity implements LocationListener {
         setContentView(R.layout.activity_guess);
         extras = getIntent().getExtras();
         hunt = (HuntConstructor) extras.get("hunt");
+
+        //TODO Update this if SharedPreferences is different
+        guesses = hunt.huntGuesses;
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
@@ -120,6 +125,7 @@ public class GuessActivity extends Activity implements LocationListener {
 
         if(!(lManager.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER)))
         {
+            MainActivity.printToast(getString(R.string.noGPS));
             Intent myIntent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS );
             startActivity(myIntent);
         }
@@ -130,6 +136,14 @@ public class GuessActivity extends Activity implements LocationListener {
         getLoc();
 
         super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        SharedPreferences.Editor edit = MainActivity.preferences.edit();
+        edit.putInt("guesses", guesses);
+        edit.apply();
+        super.onStop();
     }
 
     /**
@@ -158,7 +172,11 @@ public class GuessActivity extends Activity implements LocationListener {
             ImageButton gButton = (ImageButton) rootView.findViewById(R.id.guessButton);
             gButton.setOnClickListener(this);
 
-            gRemain.setText(String.valueOf(hunt.huntGuesses));
+            Log.i(TAG, String.valueOf(hunt.huntID));
+            Log.i(TAG, String.valueOf((MainActivity.preferences.getInt("currentHunt", -1))));
+
+            //TODO Get information from SharedPrefs about hunt when returning to it
+            gRemain.setText(String.valueOf(guesses));
 
             return rootView;
         }
@@ -166,8 +184,7 @@ public class GuessActivity extends Activity implements LocationListener {
         @Override
         public void onClick(View view) {
 
-            Integer i = Integer.parseInt(gRemain.getText().toString());
-            if (i > 0) {
+            if (guesses > 0) {
                 float dist = GuessActivity.getDist();
                 String measure = getString(R.string.meters);
                 if (dist > 1609.34){
@@ -177,11 +194,14 @@ public class GuessActivity extends Activity implements LocationListener {
                     dist = 1;
                     measure = getString(R.string.mile);
                 } else if (dist <= 5){
+                    guesses = -1;
+                    MainActivity.preferences.edit().putInt("currentHunt", -1).apply();
                     Dialogs dialog = Dialogs.newInstance(Dialogs.DialogType.FOUND);
                     dialog.show(MainActivity.sFragManager, "found");
+                    getActivity().finish();
                 }
 
-                String test = String.format("%.2f %s", dist, measure);
+                String currentText = String.format("%.2f %s", dist, measure);
 
                 if (!(currentContainer.getVisibility() == View.VISIBLE)){
                     currentContainer.setVisibility(View.VISIBLE);
@@ -191,8 +211,9 @@ public class GuessActivity extends Activity implements LocationListener {
                         pastContainer.setVisibility(View.VISIBLE);
                     }
                 }
-                currentGuess.setText(test);
-                gRemain.setText(String.valueOf(--i));
+                currentGuess.setText(currentText);
+                gRemain.setText(String.valueOf(--guesses));
+
             }
         }
     }

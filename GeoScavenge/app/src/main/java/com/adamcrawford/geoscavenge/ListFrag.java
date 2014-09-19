@@ -37,7 +37,6 @@ public class ListFrag extends ListFragment {
     String TAG = "LF";
 
     JSONObject huntJSON = new JSONObject();
-    public JSONArray huntArray = new JSONArray();
 
     private OnHuntSelected parentActivity;
 
@@ -69,10 +68,8 @@ public class ListFrag extends ListFragment {
 
         //This will be replaced by Network Data in future release
         try {
-
             Log.i(TAG, "building data");
-            huntArray.put(MainActivity.hunt1).put(MainActivity.hunt2);
-            huntJSON.put("hunts", huntArray);
+            huntJSON.put("hunts", MainActivity.huntArray);
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
         }
