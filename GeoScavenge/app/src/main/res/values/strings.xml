@@ -37,5 +37,6 @@
     <string name="noGPS">This application requires GPS.  Press back when enabled.</string>
     <string name="notConnected">Not connected to network, using local hunt data.</string>
     <string name="connected">Will be getting information from remote source in next build</string>
+    <string name="notFound">Hunt not found</string>
 
 </resources>

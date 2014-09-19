@@ -113,7 +113,10 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
 
         //TODO Search based on Query
         try {
-            hunt = (HuntConstructor) huntArray.get(query);
+            hunt = new HuntConstructor(huntArray.getJSONObject(query-1));
+            if (hunt.huntID != query) {
+                MainActivity.printToast(sContext.getString(R.string.notFound));
+            }
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
         }
