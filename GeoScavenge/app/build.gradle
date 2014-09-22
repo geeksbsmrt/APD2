@@ -21,4 +21,9 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile files('libs/aws/aws-android-sdk-2.1.0-cognito.jar')
+    compile files('libs/aws/aws-android-sdk-2.1.0-core.jar')
+    compile files('libs/aws/aws-android-sdk-2.1.0-ddb.jar')
+    compile files('libs/aws/aws-android-sdk-2.1.0-ddb-mapper.jar')
+    compile files('libs/aws/aws-android-sdk-2.1.0-s3.jar')
 }
