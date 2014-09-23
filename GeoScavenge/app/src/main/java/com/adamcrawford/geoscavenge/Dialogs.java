@@ -77,7 +77,7 @@ public class Dialogs extends DialogFragment {
                                 Dialog dialog = Dialogs.this.getDialog();
                                 EditText input = (EditText) dialog.findViewById(R.id.searchInput);
                                 Integer query = Integer.parseInt(input.getText().toString());
-                                MainActivity.searchHunts(query);
+                                MainActivity.searchHunts(query, "private");
                             }
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

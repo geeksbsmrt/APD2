@@ -90,7 +90,7 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
         confirmStart(hunt);
     }
 
-    public static void searchHunts(Integer query) {
+    public static void searchHunts(Integer query, String mode) {
         Log.i(TAG, "Searching Hunts");
         //TODO Search based on Query
         Intent searchDynamo = new Intent(sContext, SyncService.class);
@@ -98,6 +98,7 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
         searchDynamo.putExtra("type", SyncService.SearchType.SEARCH);
         searchDynamo.putExtra("query", query);
         searchDynamo.putExtra("msgr", msgr);
+        searchDynamo.putExtra("mode", mode);
         sContext.startService(searchDynamo);
     }
 

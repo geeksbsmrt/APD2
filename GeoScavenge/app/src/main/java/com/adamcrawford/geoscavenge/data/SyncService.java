@@ -25,6 +25,7 @@ import org.json.JSONArray;
  */
 public class SyncService extends IntentService {
     private String TAG = "SyncService";
+    private String mode;
     public static SearchType type;
     public enum SearchType {
         LISTDATA,
@@ -50,6 +51,9 @@ public class SyncService extends IntentService {
         Bundle extras = intent.getExtras();
         Messenger msgr = (Messenger) extras.get("msgr");
         type = (SearchType) extras.get("type");
+        if (extras.containsKey("mode")){
+            mode = extras.getString("mode");
+        }
         Message msg = Message.obtain();
 
         CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
@@ -76,7 +80,11 @@ public class SyncService extends IntentService {
                     Integer query = extras.getInt("query");
                     msg.arg1 = MainActivity.RESULT_OK;
                     msg.arg2 = 1;
-                    hunt = DynamoSearch.searchDynamo(credentialsProvider, query);
+                    if (mode.equals("private")) {
+                        hunt = DynamoSearch.searchDynamo(credentialsProvider, query, "private");
+                    } else if (mode.equals("public")){
+                        hunt = DynamoSearch.searchDynamo(credentialsProvider, query, "public");
+                    }
                     msg.obj = hunt;
                     break;
                 }
