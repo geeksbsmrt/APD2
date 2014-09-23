@@ -99,7 +99,6 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
         searchDynamo.putExtra("query", query);
         searchDynamo.putExtra("msgr", msgr);
         sContext.startService(searchDynamo);
-        //confirmStart(hunt);
     }
 
     static void confirmStart(HuntItem hunt) {
