@@ -16,7 +16,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.adamcrawford.geoscavenge.data.SyncService;
-import com.adamcrawford.geoscavenge.hunt.HuntConstructor;
 import com.adamcrawford.geoscavenge.hunt.HuntItem;
 
 import org.json.JSONArray;
@@ -113,7 +112,7 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
         dialog.show(sFragManager, "details");
     }
 
-    void startHunt(HuntConstructor hunt) {
+    void startHunt(HuntItem hunt) {
         Intent gIntent = new Intent(this, GuessActivity.class);
         gIntent.putExtra("hunt", hunt);
         startActivity(gIntent);
@@ -131,16 +130,7 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
 
         if (isConnected) {
             //TODO Fix getting from SharedPreferences
-//            if ((preferences.getInt("currentHunt", -1)) > 0) {
-//                try {
-//                    hunt = new HuntConstructor(huntArray.getJSONObject(preferences.getInt("currentHunt", -1) - 1));
-//                    startHunt(hunt);
-//                } catch (JSONException e) {
-//                    Log.e(TAG, e.getMessage());
-//                }
-//            } else {
                 getData();
-//            }
         } else {
             Dialogs dialog = Dialogs.newInstance(Dialogs.DialogType.NETWORK);
             dialog.show(getFragmentManager(), "Network");
