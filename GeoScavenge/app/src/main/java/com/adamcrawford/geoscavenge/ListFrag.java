@@ -15,12 +15,12 @@ import android.widget.ListView;
 
 import com.adamcrawford.geoscavenge.hunt.HuntAdapter;
 import com.adamcrawford.geoscavenge.hunt.HuntConstructor;
+import com.adamcrawford.geoscavenge.hunt.HuntItem;
 import com.adamcrawford.geoscavenge.hunt.NewHuntActivity;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -35,8 +35,6 @@ import java.util.ArrayList;
 public class ListFrag extends ListFragment {
 
     String TAG = "LF";
-
-    JSONObject huntJSON = new JSONObject();
 
     private OnHuntSelected parentActivity;
 
@@ -63,28 +61,20 @@ public class ListFrag extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        ArrayList<HuntConstructor> huntList = new ArrayList<HuntConstructor>();
-
-        //This will be replaced by Network Data in future release
-        try {
-            Log.i(TAG, "building data");
-            huntJSON.put("hunts", MainActivity.huntArray);
-        } catch (JSONException e) {
-            Log.e(TAG, e.getMessage());
+        if (MainActivity.huntArray != null ){
+            writeList(MainActivity.huntArray);
         }
+    }
+
+    public void writeList(JSONArray data){
+        ArrayList<HuntItem> huntList = new ArrayList<HuntItem>();
 
         try {
             Log.i(TAG, "Building list");
-            Log.i(TAG, huntJSON.toString());
-            JSONArray dataArray = huntJSON.getJSONArray("hunts");
 
-            for (int i = 0, j = dataArray.length(); i < j; i++) {
-                JSONObject hunt = (JSONObject) dataArray.get(i);
-                HuntConstructor hc = new HuntConstructor(hunt);
-                Log.i(TAG, hc.toString());
+            for (int i = 0, j = data.length(); i < j; i++) {
+                HuntItem hc = (HuntItem) data.get(i);
                 huntList.add(hc);
-                Log.i(TAG, hc.toString());
             }
 
             Log.i(TAG, huntList.toString());

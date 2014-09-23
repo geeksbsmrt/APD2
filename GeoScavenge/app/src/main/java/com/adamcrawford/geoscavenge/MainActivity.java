@@ -8,15 +8,20 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Messenger;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.adamcrawford.geoscavenge.data.SyncService;
 import com.adamcrawford.geoscavenge.hunt.HuntConstructor;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
+
+import java.lang.ref.WeakReference;
 
 
 public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
@@ -24,11 +29,9 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
     static String TAG = "MA";
     static Context sContext;
     public static FragmentManager sFragManager;
-    public static JSONObject hunt1 = new JSONObject();
-    public static JSONObject hunt2 = new JSONObject();
     public static SharedPreferences preferences;
     static HuntConstructor hunt = null;
-    public static JSONArray huntArray;
+    public static JSONArray huntArray = null;
     public static Boolean isConnected;
 
     @Override
@@ -37,44 +40,13 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        huntArray = new JSONArray();
-        try {
-            hunt1.put("id", 1);
-            hunt1.put("name", "Hunt1");
-            hunt1.put("desc", "Hunt for buried treasure");
-            hunt1.put("lat", 28.596597);
-            hunt1.put("lon", -81.301316);
-            hunt1.put("guesses", 50);
-            hunt1.put("endDesc", "Get your degree and you will have the opportunity for endless wealth!");
-            //This may not be correct.  It will be tested for Milestone 2
-            hunt1.put("imgPath", String.valueOf(R.drawable.fsu));
-            hunt2.put("id", 2);
-            hunt2.put("name", "Hunt2");
-            hunt2.put("desc", "Find the love of your life");
-            hunt2.put("lat", 28.419791);
-            hunt2.put("lon", 81.581187);
-            hunt2.put("guesses", 100);
-            hunt2.put("endDesc", "Dance with the Princes and Princesses, watch stunning fireworks, become entranced with that special someone.");
-            //This may not be correct.  It will be tested for Milestone 2
-            hunt2.put("imgPath", String.valueOf(R.drawable.castle));
-            huntArray.put(hunt1).put(hunt2);
-        } catch (JSONException e) {
-            Log.e(TAG, e.getMessage());
-        }
+        isConnected = getStatus(this);
 
         sContext = this.getApplicationContext();
         sFragManager = getFragmentManager();
 
-        Log.i(TAG, String.valueOf(preferences.getInt("currentHunt", -1)));
+        //Log.i(TAG, String.valueOf(preferences.getInt("currentHunt", -1)));
         //TODO Finish logic using remote data
-        if ((preferences.getInt("currentHunt", -1)) > 0) {
-            try {
-                hunt = new HuntConstructor(huntArray.getJSONObject(preferences.getInt("currentHunt", -1) - 1));
-                startHunt(hunt);
-            } catch (JSONException e) {
-                Log.e(TAG, e.getMessage());
-            }
-        }
 
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
@@ -82,6 +54,14 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
                     .add(R.id.container, new ListFrag())
                     .commit();
         }
+    }
+
+    public void getData(){
+        final DataHandler handler = new DataHandler(this);
+        Intent getDynamo = new Intent(this, SyncService.class);
+        Messenger msgr = new Messenger(handler);
+        getDynamo.putExtra("msgr", msgr);
+        startService(getDynamo);
     }
 
     public static void printToast(String message) {
@@ -138,18 +118,61 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
         startActivity(gIntent);
     }
 
+    void writeList(){
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container, new ListFrag())
+                .commit();
+    }
+
     @Override
     protected void onResume() {
         isConnected = getStatus(this);
 
         if (isConnected) {
-            //TODO Get data from remote
-            printToast(getString(R.string.connected));
+            //TODO Fix getting from SharedPreferences
+//            if ((preferences.getInt("currentHunt", -1)) > 0) {
+//                try {
+//                    hunt = new HuntConstructor(huntArray.getJSONObject(preferences.getInt("currentHunt", -1) - 1));
+//                    startHunt(hunt);
+//                } catch (JSONException e) {
+//                    Log.e(TAG, e.getMessage());
+//                }
+//            } else {
+                getData();
+//            }
         } else {
-            //TODO Get Data from local device
-            printToast(getString(R.string.notConnected));
+            Dialogs dialog = Dialogs.newInstance(Dialogs.DialogType.NETWORK);
+            dialog.show(getFragmentManager(), "Network");
         }
 
         super.onResume();
+    }
+    private static class DataHandler extends Handler {
+
+        String TAG = "DH";
+        private final WeakReference<MainActivity> mainActivityWeakReference;
+        public DataHandler(MainActivity activity) {
+            mainActivityWeakReference = new WeakReference<MainActivity>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            MainActivity activity = mainActivityWeakReference.get();
+            if (activity != null) {
+                JSONArray returned = (JSONArray) msg.obj;
+                if (msg.arg1 == RESULT_OK && returned != null) {
+                    Log.i(TAG, "Data returned");
+                    huntArray = returned;
+                    activity.writeList();
+//                    activity.writeList(returned);
+//                    for (int i = 0, j = returned.length(); i < j; i++){
+//                        HuntItem hunt = (HuntItem) returned.get(i);
+//                        Log.i(TAG, hunt.getHuntName());
+//                    }
+                } else {
+                    Log.i(TAG, "No data");
+                }
+            }
+        }
     }
 }

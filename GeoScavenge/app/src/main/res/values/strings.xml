@@ -35,8 +35,12 @@
     <string name="addPic">Add picture (optional)</string>
     <string name="endDesc">Description of Endpoint</string>
     <string name="noGPS">This application requires GPS.  Press back when enabled.</string>
-    <string name="notConnected">Not connected to network, using local hunt data.</string>
+    <string name="notConnected">No Network Detected</string>
+    <string name="notConnectedDesc">GeoScavenge uses network data to sync the latest data.  Please check your Network Settings to connect an available network.</string>
+    <string name="ok">OK</string>
     <string name="connected">Will be getting information from remote source in next build</string>
     <string name="notFound">Hunt not found</string>
+    <string name="loading">Loading</string>
+    <string name="wait">Please wait.</string>
 
 </resources>

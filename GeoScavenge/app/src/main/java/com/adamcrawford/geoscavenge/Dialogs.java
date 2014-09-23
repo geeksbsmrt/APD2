@@ -29,7 +29,8 @@ public class Dialogs extends DialogFragment {
     public enum DialogType {
         DETAILS,
         SEARCH,
-        FOUND
+        FOUND,
+        NETWORK
     }
 
     public Dialogs() {}
@@ -100,6 +101,17 @@ public class Dialogs extends DialogFragment {
                 builder.setView(inflater.inflate(R.layout.fragment_found, null))
                        .setTitle(R.string.locFound);
                 //TODO Implement logic to determine if last endpoint create buttons accordingly
+                break;
+            }
+            case NETWORK: {
+                builder.setView(inflater.inflate(R.layout.not_connected, null))
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Dialogs.this.getDialog().cancel();
+                            }
+                        })
+                        .setTitle(R.string.notConnected);
                 break;
             }
             default: {

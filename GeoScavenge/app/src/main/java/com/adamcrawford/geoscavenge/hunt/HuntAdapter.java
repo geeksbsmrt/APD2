@@ -18,12 +18,12 @@ import java.util.ArrayList;
  * File:    HuntAdapter
  * Purpose: TODO Minimum 2 sentence description
  */
-public class HuntAdapter extends ArrayAdapter<HuntConstructor> {
+public class HuntAdapter extends ArrayAdapter<HuntItem> {
 
     private Context context;
-    private ArrayList<HuntConstructor> objects;
+    private ArrayList<HuntItem> objects;
 
-    public HuntAdapter(Context context, int resource, ArrayList<HuntConstructor> objects)
+    public HuntAdapter(Context context, int resource, ArrayList<HuntItem> objects)
     {
         super(context, resource, objects);
         this.context = context;
@@ -34,7 +34,7 @@ public class HuntAdapter extends ArrayAdapter<HuntConstructor> {
     public View getView(int position, View convertView, ViewGroup parent)
     {
         ViewHolder holder;
-        HuntConstructor hunt = objects.get(position);
+        HuntItem hunt = objects.get(position);
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -48,8 +48,8 @@ public class HuntAdapter extends ArrayAdapter<HuntConstructor> {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.huntNameView.setText(hunt.huntName);
-        holder.huntDescView.setText(hunt.huntDesc);
+        holder.huntNameView.setText(hunt.getHuntName());
+        holder.huntDescView.setText(hunt.getHuntDesc());
 
         return convertView;
     }
