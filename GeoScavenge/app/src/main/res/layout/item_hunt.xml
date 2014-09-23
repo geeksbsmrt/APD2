@@ -4,20 +4,29 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/huntName"
         android:layout_marginBottom="5dp"
         android:text="@string/huntName"
         android:textAppearance="?android:textAppearanceMedium"
     />
+
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/huntDesc"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="5dp"
         android:text="@string/huntDesc"
     />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/huntLoc"
+        android:text="@string/huntLoc"
+        android:layout_marginBottom="10dp"/>
 
 </LinearLayout>

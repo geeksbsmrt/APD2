@@ -18,7 +18,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.adamcrawford.geoscavenge.hunt.HuntConstructor;
+import com.adamcrawford.geoscavenge.hunt.HuntItem;
 
 
 public class GuessActivity extends Activity implements LocationListener {
@@ -27,7 +27,7 @@ public class GuessActivity extends Activity implements LocationListener {
     static LocationManager lManager;
     static Criteria criteria;
     static String TAG = "GA";
-    static HuntConstructor hunt;
+    static HuntItem hunt;
     static Integer guesses;
 
     @Override
@@ -35,24 +35,27 @@ public class GuessActivity extends Activity implements LocationListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guess);
         extras = getIntent().getExtras();
-        hunt = (HuntConstructor) extras.get("hunt");
+        hunt = (HuntItem) extras.get("hunt");
+
+        lManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
 
         //TODO Update this if SharedPreferences is different
-        guesses = hunt.huntGuesses;
+        guesses = hunt.getGuesses();
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.container, new GuessFrag())
                     .commit();
         }
+        getLoc();
     }
 
     public static Float getDist(){
 
         Location loc = lManager.getLastKnownLocation(lManager.getBestProvider(criteria, false));
         Location target = new Location("target");
-        target.setLatitude(hunt.huntLat);
-        target.setLongitude(hunt.huntLon);
+        target.setLatitude(hunt.getHuntLat());
+        target.setLongitude(hunt.getHuntLon());
         Float dist = loc.distanceTo(target);
         Log.i(TAG, String.valueOf(dist));
         return dist;
@@ -61,6 +64,15 @@ public class GuessActivity extends Activity implements LocationListener {
     private void getLoc(){
 
         Log.i(TAG, "In getloc");
+        if(!(lManager.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER)))
+        {
+            MainActivity.printToast(getString(R.string.noGPS));
+            Intent myIntent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS );
+            startActivity(myIntent);
+        }
+
+        criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);
 
         if (lManager != null){
 
@@ -69,7 +81,6 @@ public class GuessActivity extends Activity implements LocationListener {
             // Normal updates while activity is visible.
             lManager.requestLocationUpdates(2*1000, 0, criteria, this, null);
             //lManager.requestLocationUpdates("gps", 2*1000, 0, this);
-
 
             // Register a receiver that listens for when a better provider than I'm using becomes available.
             String bestProvider = lManager.getBestProvider(criteria, false);
@@ -92,7 +103,7 @@ public class GuessActivity extends Activity implements LocationListener {
     };
 
     @Override
-    public void onLocationChanged(Location location) {
+    public void onLocationChanged(Location l) {
     }
 
     @Override
@@ -121,20 +132,7 @@ public class GuessActivity extends Activity implements LocationListener {
 
     @Override
     protected void onResume() {
-        lManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
-
-        if(!(lManager.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER)))
-        {
-            MainActivity.printToast(getString(R.string.noGPS));
-            Intent myIntent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS );
-            startActivity(myIntent);
-        }
-
-        criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-
         getLoc();
-
         super.onResume();
     }
 
@@ -172,7 +170,7 @@ public class GuessActivity extends Activity implements LocationListener {
             ImageButton gButton = (ImageButton) rootView.findViewById(R.id.guessButton);
             gButton.setOnClickListener(this);
 
-            Log.i(TAG, String.valueOf(hunt.huntID));
+            Log.i(TAG, String.valueOf(hunt.getHuntID()));
             Log.i(TAG, String.valueOf((MainActivity.preferences.getInt("currentHunt", -1))));
 
             //TODO Get information from SharedPrefs about hunt when returning to it
@@ -213,7 +211,6 @@ public class GuessActivity extends Activity implements LocationListener {
                 }
                 currentGuess.setText(currentText);
                 gRemain.setText(String.valueOf(--guesses));
-
             }
         }
     }

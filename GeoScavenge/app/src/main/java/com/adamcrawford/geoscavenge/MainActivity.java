@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.adamcrawford.geoscavenge.data.SyncService;
 import com.adamcrawford.geoscavenge.hunt.HuntConstructor;
+import com.adamcrawford.geoscavenge.hunt.HuntItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,7 +31,7 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
     static Context sContext;
     public static FragmentManager sFragManager;
     public static SharedPreferences preferences;
-    static HuntConstructor hunt = null;
+    static HuntItem hunt = null;
     public static JSONArray huntArray = null;
     public static Boolean isConnected;
 
@@ -84,7 +85,7 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
     }
 
     @Override
-    public void onHuntSelected(HuntConstructor hunt) {
+    public void onHuntSelected(HuntItem hunt) {
         confirmStart(hunt);
     }
 
@@ -93,8 +94,8 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
 
         //TODO Search based on Query
         try {
-            hunt = new HuntConstructor(huntArray.getJSONObject(query-1));
-            if (hunt.huntID != query) {
+            hunt = (HuntItem) huntArray.get(query);
+            if (!hunt.getHuntID().equals(query)) {
                 MainActivity.printToast(sContext.getString(R.string.notFound));
             }
         } catch (JSONException e) {
@@ -103,7 +104,7 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
         confirmStart(hunt);
     }
 
-    static void confirmStart(HuntConstructor hunt) {
+    static void confirmStart(HuntItem hunt) {
         Dialogs dialog = Dialogs.newInstance(Dialogs.DialogType.DETAILS);
         Bundle args = new Bundle();
 

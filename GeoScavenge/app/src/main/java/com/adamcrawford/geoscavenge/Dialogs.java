@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.adamcrawford.geoscavenge.hunt.HuntConstructor;
+import com.adamcrawford.geoscavenge.hunt.HuntItem;
 
 /**
  * Author:  Adam Crawford
@@ -51,9 +51,9 @@ public class Dialogs extends DialogFragment {
                 View view = inflater.inflate(R.layout.fragment_details, null);
                 TextView details = (TextView) view.findViewById(R.id.huntDetails);
                 TextView guesses = (TextView) view.findViewById(R.id.detailGuesses);
-                final HuntConstructor hunt = (HuntConstructor) args.getSerializable("hunt");
-                details.setText(hunt.huntDesc);
-                guesses.setText(hunt.huntGuesses + " " + getString(R.string.guesses));
+                final HuntItem hunt = (HuntItem) args.getSerializable("hunt");
+                details.setText(hunt.getHuntDesc());
+                guesses.setText(hunt.getGuesses() + " " + getString(R.string.guesses));
                 builder.setView(view)
                         .setPositiveButton(R.string.start, new DialogInterface.OnClickListener() {
                            @Override
@@ -61,8 +61,8 @@ public class Dialogs extends DialogFragment {
                                Intent gIntent = new Intent(getActivity(), GuessActivity.class);
                                gIntent.putExtra("hunt", hunt);
                                SharedPreferences.Editor edit = MainActivity.preferences.edit();
-                               edit.putInt("currentHunt", hunt.huntID);
-                               Log.i(TAG, String .valueOf(hunt.huntID));
+                               edit.putInt("currentHunt", hunt.getHuntID());
+                               Log.i(TAG, String .valueOf(hunt.getHuntID()));
                                edit.apply();
                                startActivity(gIntent);
                            }

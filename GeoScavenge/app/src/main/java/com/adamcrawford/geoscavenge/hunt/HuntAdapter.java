@@ -43,6 +43,7 @@ public class HuntAdapter extends ArrayAdapter<HuntItem> {
             holder = new ViewHolder();
             holder.huntNameView = (TextView) convertView.findViewById(R.id.huntName);
             holder.huntDescView = (TextView) convertView.findViewById(R.id.huntDesc);
+            holder.huntLocation = (TextView) convertView.findViewById(R.id.huntLoc);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -50,6 +51,7 @@ public class HuntAdapter extends ArrayAdapter<HuntItem> {
 
         holder.huntNameView.setText(hunt.getHuntName());
         holder.huntDescView.setText(hunt.getHuntDesc());
+        holder.huntLocation.setText(hunt.getHuntCity() + ", " + hunt.getHuntState());
 
         return convertView;
     }
@@ -57,5 +59,6 @@ public class HuntAdapter extends ArrayAdapter<HuntItem> {
     static class ViewHolder {
         TextView huntNameView;
         TextView huntDescView;
+        TextView huntLocation;
     }
 }

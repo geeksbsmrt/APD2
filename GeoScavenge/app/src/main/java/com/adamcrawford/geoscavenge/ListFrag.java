@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.adamcrawford.geoscavenge.hunt.HuntAdapter;
-import com.adamcrawford.geoscavenge.hunt.HuntConstructor;
 import com.adamcrawford.geoscavenge.hunt.HuntItem;
 import com.adamcrawford.geoscavenge.hunt.NewHuntActivity;
 
@@ -42,7 +41,7 @@ public class ListFrag extends ListFragment {
     }
 
     public interface OnHuntSelected {
-        void onHuntSelected(HuntConstructor hunt);
+        void onHuntSelected(HuntItem hunt);
     }
 
     @Override
@@ -131,7 +130,7 @@ public class ListFrag extends ListFragment {
 
     @Override
     public void onListItemClick(ListView list, View view, int i, long id) {
-        HuntConstructor hunt = (HuntConstructor) list.getItemAtPosition(i);
+        HuntItem hunt = (HuntItem) list.getItemAtPosition(i);
         parentActivity.onHuntSelected(hunt);
     }
 }
