@@ -110,10 +110,14 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
         dialog.show(sFragManager, "details");
     }
 
-    void startHunt(HuntItem hunt) {
-        Intent gIntent = new Intent(this, GuessActivity.class);
+    static void startHunt(HuntItem hunt) {
+        Intent gIntent = new Intent(sContext, GuessActivity.class);
         gIntent.putExtra("hunt", hunt);
-        startActivity(gIntent);
+        SharedPreferences.Editor edit = preferences.edit();
+        edit.putInt("currentHunt", hunt.getHuntID());
+        Log.i(TAG, String .valueOf(hunt.getHuntID()));
+        edit.apply();
+        sContext.startActivity(gIntent);
     }
 
     void writeList(){
@@ -158,6 +162,7 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
                             break;
                         } else {
                             Log.i(TAG, "No data");
+                            printToast(activity.getString(R.string.notFound));
                             break;
                         }
                     }

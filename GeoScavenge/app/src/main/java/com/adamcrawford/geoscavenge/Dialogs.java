@@ -4,8 +4,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -58,13 +56,7 @@ public class Dialogs extends DialogFragment {
                         .setPositiveButton(R.string.start, new DialogInterface.OnClickListener() {
                            @Override
                            public void onClick(DialogInterface dialogInterface, int i) {
-                               Intent gIntent = new Intent(getActivity(), GuessActivity.class);
-                               gIntent.putExtra("hunt", hunt);
-                               SharedPreferences.Editor edit = MainActivity.preferences.edit();
-                               edit.putInt("currentHunt", hunt.getHuntID());
-                               Log.i(TAG, String .valueOf(hunt.getHuntID()));
-                               edit.apply();
-                               startActivity(gIntent);
+                               MainActivity.startHunt(hunt);
                            }
                        })
                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

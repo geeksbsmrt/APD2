@@ -66,19 +66,22 @@ public class SyncService extends IntentService {
 
             switch (type) {
                 case LISTDATA: {
-                    huntArray = DynamoData.getData(credentialsProvider);
                     msg.arg1 = MainActivity.RESULT_OK;
                     msg.arg2 = 0;
+                    huntArray = DynamoData.getData(credentialsProvider);
                     msg.obj = huntArray;
+                    break;
                 }
                 case SEARCH: {
                     Integer query = extras.getInt("query");
-                    hunt = DynamoSearch.searchDynamo(credentialsProvider);
                     msg.arg1 = MainActivity.RESULT_OK;
                     msg.arg2 = 1;
+                    hunt = DynamoSearch.searchDynamo(credentialsProvider, query);
                     msg.obj = hunt;
+                    break;
                 }
                 default: {
+                    break;
                 }
             }
         } catch (Exception e) {

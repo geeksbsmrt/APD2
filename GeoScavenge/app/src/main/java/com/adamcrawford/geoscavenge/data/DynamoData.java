@@ -26,7 +26,7 @@ import java.io.IOException;
  * Purpose: TODO Minimum 2 sentence description
  */
 public class DynamoData {
-    static String TAG = "Dynamo";
+    static String TAG = "DynamoData";
     static AmazonDynamoDBClient client;
     private DynamoDBMapper mapper;
     static JSONArray huntArray = new JSONArray();
