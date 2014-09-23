@@ -10,6 +10,7 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import com.adamcrawford.geoscavenge.MainActivity;
+import com.adamcrawford.geoscavenge.hunt.HuntItem;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.regions.Regions;
 
@@ -24,9 +25,15 @@ import org.json.JSONArray;
  */
 public class SyncService extends IntentService {
     private String TAG = "SyncService";
+    public static SearchType type;
+    public enum SearchType {
+        LISTDATA,
+        SEARCH
+    }
 
     public static Context sContext;
     JSONArray huntArray;
+    HuntItem hunt;
 
     public SyncService() {
         super("SyncService");
@@ -42,6 +49,7 @@ public class SyncService extends IntentService {
         Log.i(TAG, "handling Intent");
         Bundle extras = intent.getExtras();
         Messenger msgr = (Messenger) extras.get("msgr");
+        type = (SearchType) extras.get("type");
         Message msg = Message.obtain();
 
         CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
@@ -55,14 +63,28 @@ public class SyncService extends IntentService {
 
         try {
             Log.i(TAG, "Getting Dynamo Data");
-            huntArray = DynamoData.getData(credentialsProvider);
+
+            switch (type) {
+                case LISTDATA: {
+                    huntArray = DynamoData.getData(credentialsProvider);
+                    msg.arg1 = MainActivity.RESULT_OK;
+                    msg.arg2 = 0;
+                    msg.obj = huntArray;
+                }
+                case SEARCH: {
+                    Integer query = extras.getInt("query");
+                    hunt = DynamoSearch.searchDynamo(credentialsProvider);
+                    msg.arg1 = MainActivity.RESULT_OK;
+                    msg.arg2 = 1;
+                    msg.obj = hunt;
+                }
+                default: {
+                }
+            }
         } catch (Exception e) {
             Log.e(TAG, "Catching error");
             e.printStackTrace();
         }
-
-        msg.arg1 = MainActivity.RESULT_OK;
-        msg.obj = huntArray;
 
         try {
             msgr.send(msg);

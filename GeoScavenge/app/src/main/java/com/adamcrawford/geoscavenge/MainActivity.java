@@ -19,7 +19,6 @@ import com.adamcrawford.geoscavenge.data.SyncService;
 import com.adamcrawford.geoscavenge.hunt.HuntItem;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.lang.ref.WeakReference;
 
@@ -30,13 +29,16 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
     static Context sContext;
     public static FragmentManager sFragManager;
     public static SharedPreferences preferences;
-    static HuntItem hunt = null;
     public static JSONArray huntArray = null;
     public static Boolean isConnected;
+    DataHandler handler;
+    static DataHandler sHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        handler = new DataHandler(this);
+        sHandler = new DataHandler(this);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -57,9 +59,9 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
     }
 
     public void getData(){
-        final DataHandler handler = new DataHandler(this);
         Intent getDynamo = new Intent(this, SyncService.class);
         Messenger msgr = new Messenger(handler);
+        getDynamo.putExtra("type", SyncService.SearchType.LISTDATA);
         getDynamo.putExtra("msgr", msgr);
         startService(getDynamo);
     }
@@ -90,17 +92,14 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
 
     public static void searchHunts(Integer query) {
         Log.i(TAG, "Searching Hunts");
-
         //TODO Search based on Query
-        try {
-            hunt = (HuntItem) huntArray.get(query);
-            if (!hunt.getHuntID().equals(query)) {
-                MainActivity.printToast(sContext.getString(R.string.notFound));
-            }
-        } catch (JSONException e) {
-            Log.e(TAG, e.getMessage());
-        }
-        confirmStart(hunt);
+        Intent searchDynamo = new Intent(sContext, SyncService.class);
+        Messenger msgr = new Messenger(sHandler);
+        searchDynamo.putExtra("type", SyncService.SearchType.SEARCH);
+        searchDynamo.putExtra("query", query);
+        searchDynamo.putExtra("msgr", msgr);
+        sContext.startService(searchDynamo);
+        //confirmStart(hunt);
     }
 
     static void confirmStart(HuntItem hunt) {
@@ -150,18 +149,32 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
         public void handleMessage(Message msg) {
             MainActivity activity = mainActivityWeakReference.get();
             if (activity != null) {
-                JSONArray returned = (JSONArray) msg.obj;
-                if (msg.arg1 == RESULT_OK && returned != null) {
-                    Log.i(TAG, "Data returned");
-                    huntArray = returned;
-                    activity.writeList();
-//                    activity.writeList(returned);
-//                    for (int i = 0, j = returned.length(); i < j; i++){
-//                        HuntItem hunt = (HuntItem) returned.get(i);
-//                        Log.i(TAG, hunt.getHuntName());
-//                    }
-                } else {
-                    Log.i(TAG, "No data");
+                switch (msg.arg2){
+                    case 0: {
+                        JSONArray returned = (JSONArray) msg.obj;
+                        if (msg.arg1 == RESULT_OK && returned != null) {
+                            Log.i(TAG, "Data returned");
+                            huntArray = returned;
+                            activity.writeList();
+                            break;
+                        } else {
+                            Log.i(TAG, "No data");
+                            break;
+                        }
+                    }
+                    case 1: {
+                        if (msg.arg1 == RESULT_OK && msg.obj != null) {
+                            HuntItem hunt = (HuntItem) msg.obj;
+                            confirmStart(hunt);
+                            break;
+                        } else {
+                            printToast(activity.getString(R.string.notFound));
+                            break;
+                        }
+                    }
+                    default:{
+                        break;
+                    }
                 }
             }
         }
