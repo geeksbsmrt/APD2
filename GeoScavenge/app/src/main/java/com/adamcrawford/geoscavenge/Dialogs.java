@@ -11,14 +11,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.adamcrawford.geoscavenge.hunt.HuntItem;
+import com.adamcrawford.geoscavenge.hunt.list.HuntItem;
 
 /**
  * Author:  Adam Crawford
  * Project: GeoScavenge
  * Package: com.adamcrawford.geoscavenge
  * File:    Dialogs
- * Purpose: TODO Minimum 2 sentence description
  */
 public class Dialogs extends DialogFragment {
 

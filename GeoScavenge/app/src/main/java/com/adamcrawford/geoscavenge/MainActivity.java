@@ -16,7 +16,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.adamcrawford.geoscavenge.data.SyncService;
-import com.adamcrawford.geoscavenge.hunt.HuntItem;
+import com.adamcrawford.geoscavenge.guess.GuessActivity;
+import com.adamcrawford.geoscavenge.hunt.list.HuntItem;
 
 import org.json.JSONArray;
 
@@ -29,39 +30,51 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
     static Context sContext;
     public static FragmentManager sFragManager;
     public static SharedPreferences preferences;
-    public static JSONArray huntArray = null;
     public static Boolean isConnected;
     DataHandler handler;
-    static DataHandler sHandler;
+    private ListFrag lf;
+    public static Messenger msgr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_main);
+
+        lf = (ListFrag) getFragmentManager().findFragmentById(R.id.listFrag);
         handler = new DataHandler(this);
-        sHandler = new DataHandler(this);
-
+        msgr = new Messenger(handler);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
+        sContext = this;
         isConnected = getStatus(this);
 
-        sContext = this.getApplicationContext();
-        sFragManager = getFragmentManager();
-
-        //Log.i(TAG, String.valueOf(preferences.getInt("currentHunt", -1)));
-        //TODO Finish logic using remote data
-
-        setContentView(R.layout.activity_main);
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new ListFrag())
-                    .commit();
+        if (isConnected) {
+            Integer currentHunt = preferences.getInt("currentHunt", -1);
+            if (currentHunt > 0) {
+                Log.i(TAG, currentHunt.toString());
+                String mode = preferences.getString("mode", "noMode");
+                Integer query = preferences.getInt("currentHunt", -1);
+                if (mode.equals("public") || mode.equals("private")){
+                    searchHunts(query, mode);
+                } else {
+                    Log.wtf(TAG, "should not be here");
+                }
+            } else {
+                getData();
+            }
+        } else {
+            Dialogs dialog = Dialogs.newInstance(Dialogs.DialogType.NETWORK);
+            dialog.show(getFragmentManager(), "Network");
         }
+    }
+
+    private void sendData(JSONArray hunts){
+        lf.newData(hunts);
     }
 
     public void getData(){
         Intent getDynamo = new Intent(this, SyncService.class);
         Messenger msgr = new Messenger(handler);
-        getDynamo.putExtra("type", SyncService.SearchType.LISTDATA);
+        getDynamo.putExtra("type", SyncService.SyncType.LISTDATA);
         getDynamo.putExtra("msgr", msgr);
         startService(getDynamo);
     }
@@ -92,27 +105,26 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
 
     public static void searchHunts(Integer query, String mode) {
         Log.i(TAG, "Searching Hunts");
-        //TODO Search based on Query
         Intent searchDynamo = new Intent(sContext, SyncService.class);
-        Messenger msgr = new Messenger(sHandler);
-        searchDynamo.putExtra("type", SyncService.SearchType.SEARCH);
+        searchDynamo.putExtra("type", SyncService.SyncType.SEARCH);
         searchDynamo.putExtra("query", query);
         searchDynamo.putExtra("msgr", msgr);
         searchDynamo.putExtra("mode", mode);
         sContext.startService(searchDynamo);
     }
 
-    static void confirmStart(HuntItem hunt) {
+    void confirmStart(HuntItem hunt) {
         Dialogs dialog = Dialogs.newInstance(Dialogs.DialogType.DETAILS);
         Bundle args = new Bundle();
 
         args.putSerializable("hunt", hunt);
         dialog.setArguments(args);
-        dialog.show(sFragManager, "details");
+        dialog.show(getFragmentManager(), "details");
     }
 
     static void startHunt(HuntItem hunt) {
         Intent gIntent = new Intent(sContext, GuessActivity.class);
+        gIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         gIntent.putExtra("hunt", hunt);
         SharedPreferences.Editor edit = preferences.edit();
         edit.putInt("currentHunt", hunt.getHuntID());
@@ -121,27 +133,7 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
         sContext.startActivity(gIntent);
     }
 
-    void writeList(){
-        getFragmentManager().beginTransaction()
-                .replace(R.id.container, new ListFrag())
-                .commit();
-    }
-
-    @Override
-    protected void onResume() {
-        isConnected = getStatus(this);
-
-        if (isConnected) {
-            //TODO Fix getting from SharedPreferences
-                getData();
-        } else {
-            Dialogs dialog = Dialogs.newInstance(Dialogs.DialogType.NETWORK);
-            dialog.show(getFragmentManager(), "Network");
-        }
-
-        super.onResume();
-    }
-    private static class DataHandler extends Handler {
+    public static class DataHandler extends Handler {
 
         String TAG = "DH";
         private final WeakReference<MainActivity> mainActivityWeakReference;
@@ -158,8 +150,7 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
                         JSONArray returned = (JSONArray) msg.obj;
                         if (msg.arg1 == RESULT_OK && returned != null) {
                             Log.i(TAG, "Data returned");
-                            huntArray = returned;
-                            activity.writeList();
+                            activity.sendData(returned);
                             break;
                         } else {
                             Log.i(TAG, "No data");
@@ -170,7 +161,7 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
                     case 1: {
                         if (msg.arg1 == RESULT_OK && msg.obj != null) {
                             HuntItem hunt = (HuntItem) msg.obj;
-                            confirmStart(hunt);
+                            activity.confirmStart(hunt);
                             break;
                         } else {
                             printToast(activity.getString(R.string.notFound));

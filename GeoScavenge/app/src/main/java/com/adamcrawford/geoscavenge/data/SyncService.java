@@ -10,7 +10,7 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import com.adamcrawford.geoscavenge.MainActivity;
-import com.adamcrawford.geoscavenge.hunt.HuntItem;
+import com.adamcrawford.geoscavenge.hunt.list.HuntItem;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.regions.Regions;
 
@@ -21,20 +21,21 @@ import org.json.JSONArray;
  * Project: GeoScavenge
  * Package: com.adamcrawford.geoscavenge.data
  * File:    SyncService
- * Purpose: TODO Minimum 2 sentence description
  */
 public class SyncService extends IntentService {
     private String TAG = "SyncService";
     private String mode;
-    public static SearchType type;
-    public enum SearchType {
+    public static SyncType type;
+    public enum SyncType {
         LISTDATA,
-        SEARCH
+        SEARCH,
+        PUTITEM,
+        PUTIMG,
+        GETIMG
     }
 
     public static Context sContext;
     JSONArray huntArray;
-    HuntItem hunt;
 
     public SyncService() {
         super("SyncService");
@@ -50,7 +51,7 @@ public class SyncService extends IntentService {
         Log.i(TAG, "handling Intent");
         Bundle extras = intent.getExtras();
         Messenger msgr = (Messenger) extras.get("msgr");
-        type = (SearchType) extras.get("type");
+        type = (SyncType) extras.get("type");
         if (extras.containsKey("mode")){
             mode = extras.getString("mode");
         }
@@ -80,12 +81,21 @@ public class SyncService extends IntentService {
                     Integer query = extras.getInt("query");
                     msg.arg1 = MainActivity.RESULT_OK;
                     msg.arg2 = 1;
-                    if (mode.equals("private")) {
-                        hunt = DynamoSearch.searchDynamo(credentialsProvider, query, "private");
-                    } else if (mode.equals("public")){
-                        hunt = DynamoSearch.searchDynamo(credentialsProvider, query, "public");
-                    }
-                    msg.obj = hunt;
+                    msg.obj = DynamoSearch.searchDynamo(credentialsProvider, query, mode);
+                    break;
+                }
+                case PUTITEM: {
+                    DynamoPut.putItem(credentialsProvider, (HuntItem) extras.get("hunt"), mode);
+                    msg.arg1 = MainActivity.RESULT_OK;
+                    msg.arg2 = 2;
+                    break;
+                }
+                case PUTIMG: {
+                    //TODO S3 Img upload
+                    break;
+                }
+                case GETIMG: {
+                    //TODO S3 Img get
                     break;
                 }
                 default: {
@@ -96,10 +106,11 @@ public class SyncService extends IntentService {
             Log.e(TAG, "Catching error");
             e.printStackTrace();
         }
-
         try {
             msgr.send(msg);
         } catch (RemoteException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

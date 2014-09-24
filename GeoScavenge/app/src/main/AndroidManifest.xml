@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".GuessActivity"
+            android:name=".guess.GuessActivity"
             android:label="@string/title_activity_guess" >
         </activity>
         <activity
@@ -34,7 +34,7 @@
                 android:value="com.adamcrawford.geoscavenge.MainActivity" />
         </activity>
         <activity
-            android:name=".hunt.NewEndpointActivity"
+            android:name=".hunt.endpoint.NewEndpointActivity"
             android:label="@string/title_activity_new_endpoint"
             android:parentActivityName=".hunt.NewHuntActivity" >
             <meta-data

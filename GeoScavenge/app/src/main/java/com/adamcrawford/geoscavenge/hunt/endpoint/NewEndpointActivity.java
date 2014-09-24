@@ -1,4 +1,4 @@
-package com.adamcrawford.geoscavenge.hunt;
+package com.adamcrawford.geoscavenge.hunt.endpoint;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -45,7 +45,7 @@ public class NewEndpointActivity extends Activity {
 
         @Override
         public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-            inflater.inflate(R.menu.new_hunt, menu);
+            inflater.inflate(R.menu.save_menu, menu);
             super.onCreateOptionsMenu(menu,inflater);
         }
 

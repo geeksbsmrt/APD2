@@ -1,4 +1,4 @@
-package com.adamcrawford.geoscavenge.hunt;
+package com.adamcrawford.geoscavenge.hunt.list;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -16,7 +16,6 @@ import java.util.ArrayList;
  * Project: GeoScavenge
  * Package: com.adamcrawford.geoscavenge.hunt
  * File:    HuntAdapter
- * Purpose: TODO Minimum 2 sentence description
  */
 public class HuntAdapter extends ArrayAdapter<HuntItem> {
 

@@ -13,9 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.adamcrawford.geoscavenge.hunt.HuntAdapter;
-import com.adamcrawford.geoscavenge.hunt.HuntItem;
 import com.adamcrawford.geoscavenge.hunt.NewHuntActivity;
+import com.adamcrawford.geoscavenge.hunt.list.HuntAdapter;
+import com.adamcrawford.geoscavenge.hunt.list.HuntItem;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -29,12 +29,10 @@ import java.util.ArrayList;
  * Project: GeoScavenge
  * Package: com.adamcrawford.geoscavenge
  * File:    ListFrag
- * Purpose: TODO Minimum 2 sentence description
  */
 public class ListFrag extends ListFragment {
 
-    String TAG = "LF";
-
+    static String TAG = "LF";
     private OnHuntSelected parentActivity;
 
     public ListFrag() {
@@ -52,47 +50,37 @@ public class ListFrag extends ListFragment {
                 parentActivity = (OnHuntSelected) activity;
             } catch (ClassCastException e) {
                 throw new ClassCastException(activity.toString()
-                        + " must implement OnToonSelected");
+                        + " must implement OnHuntSelected");
             }
-        }
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (MainActivity.huntArray != null ){
-            writeList(MainActivity.huntArray);
-        }
-    }
-
-    public void writeList(JSONArray data){
-        ArrayList<HuntItem> huntList = new ArrayList<HuntItem>();
-
-        try {
-            Log.i(TAG, "Building list");
-
-            for (int i = 0, j = data.length(); i < j; i++) {
-                HuntItem hc = (HuntItem) data.get(i);
-                huntList.add(hc);
-            }
-
-            Log.i(TAG, huntList.toString());
-
-            Log.i(TAG, "building adapter");
-            HuntAdapter adapter = new HuntAdapter(getActivity(), R.layout.item_hunt, huntList);
-            adapter.notifyDataSetChanged();
-            Log.i(TAG,"Setting Adapter");
-            setListAdapter(adapter);
-        } catch (JSONException e) {
-            Log.e(TAG, e.getMessage());
         }
     }
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View listView = inflater.inflate(R.layout.fragment_main, container, false);
+        View listView = inflater.inflate(R.layout.activity_main, container, false);
         setHasOptionsMenu(true);
         return listView;
+    }
+
+    public void newData(JSONArray returned){
+        ArrayList<HuntItem> huntList = new ArrayList<HuntItem>();
+        if (returned != null ){
+            try {
+                Log.i(TAG, "Building list");
+                for (int i = 0, j = returned.length(); i < j; i++) {
+                    HuntItem hc = (HuntItem) returned.get(i);
+                    huntList.add(hc);
+                }
+
+                Log.i(TAG, "building adapter");
+                HuntAdapter adapter = new HuntAdapter(MainActivity.sContext, R.layout.item_hunt, huntList);
+                adapter.notifyDataSetChanged();
+                Log.i(TAG,"Setting Adapter");
+                setListAdapter(adapter);
+            } catch (JSONException e) {
+                Log.e(TAG, e.getMessage());
+            }
+        }
     }
 
     @Override
@@ -103,9 +91,7 @@ public class ListFrag extends ListFragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
-
             case R.id.action_add: {
                 //To Add Activity
                 Log.i(TAG, "Launching Add Activity");
@@ -113,7 +99,6 @@ public class ListFrag extends ListFragment {
                 startActivity(nIntent);
                 return true;
             }
-
             case R.id.action_search: {
                 //search
                 Log.i(TAG, "Search Action Item pressed");
@@ -121,7 +106,6 @@ public class ListFrag extends ListFragment {
                 dialog.show(getFragmentManager(), "search");
                 return true;
             }
-
             default: {
                 return super.onOptionsItemSelected(item);
             }

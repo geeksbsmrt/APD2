@@ -2,7 +2,7 @@ package com.adamcrawford.geoscavenge.data;
 
 import android.util.Log;
 
-import com.adamcrawford.geoscavenge.hunt.HuntItem;
+import com.adamcrawford.geoscavenge.hunt.list.HuntItem;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
@@ -23,7 +23,6 @@ import java.io.IOException;
  * Project: GeoScavenge
  * Package: com.adamcrawford.geoscavenge.data
  * File:    DynamoData
- * Purpose: TODO Minimum 2 sentence description
  */
 public class DynamoData {
     static String TAG = "DynamoData";

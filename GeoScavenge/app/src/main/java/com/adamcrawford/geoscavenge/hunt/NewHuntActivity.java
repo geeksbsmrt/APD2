@@ -1,79 +1,38 @@
 package com.adamcrawford.geoscavenge.hunt;
 
-import android.app.ActionBar;
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageButton;
 
 import com.adamcrawford.geoscavenge.R;
+import com.adamcrawford.geoscavenge.data.SyncService;
+import com.adamcrawford.geoscavenge.hunt.endpoint.NewEndpointActivity;
+import com.adamcrawford.geoscavenge.hunt.list.HuntItem;
 
-public class NewHuntActivity extends Activity {
+public class NewHuntActivity extends Activity implements NewHuntFragment.OnNewHunt {
+
+    NewHuntFragment nhf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_hunt);
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new NewHuntFragment())
-                    .commit();
-        }
+        setContentView(R.layout.fragment_new_hunt);
+        nhf = (NewHuntFragment) getFragmentManager().findFragmentById(R.id.newHuntFrag);
     }
 
-    public static class NewHuntFragment extends Fragment implements View.OnClickListener {
+    @Override
+    public void onClick(View view) {
+        Intent eIntent = new Intent(nhf.getActivity(), NewEndpointActivity.class);
+        startActivityForResult(eIntent, 0);
+    }
 
-        ImageButton addEndButton;
-
-        public NewHuntFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_new_hunt, container, false);
-            setHasOptionsMenu(true);
-            ActionBar actionBar = getActivity().getActionBar();
-            actionBar.setHomeButtonEnabled(true);
-            actionBar.setDisplayHomeAsUpEnabled(true);
-
-            addEndButton = (ImageButton) rootView.findViewById(R.id.addEndButton);
-            addEndButton.setOnClickListener(this);
-            return rootView;
-        }
-        @Override
-        public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-            inflater.inflate(R.menu.new_hunt, menu);
-            super.onCreateOptionsMenu(menu,inflater);
-        }
-
-        @Override
-        public boolean onOptionsItemSelected(MenuItem item) {
-
-            switch (item.getItemId()) {
-                case android.R.id.home: {
-                    //ask user if they want to save
-                }
-                case R.id.action_save: {
-                    getActivity().finish();
-                }
-                default: {
-                    return false;
-                }
-            }
-        }
-
-        @Override
-        public void onClick(View view) {
-            Intent eIntent = new Intent(getActivity(), NewEndpointActivity.class);
-            startActivityForResult(eIntent, 0);
-        }
+    @Override
+    public void saveHunt(HuntItem hunt, String mode){
+        Intent sIntent = new Intent(nhf.getActivity(), SyncService.class);
+        sIntent.putExtra("type", SyncService.SyncType.PUTITEM);
+        sIntent.putExtra("mode", mode);
+        sIntent.putExtra("hunt", hunt);
+        nhf.getActivity().finish();
     }
 }

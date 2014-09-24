@@ -1,68 +1,13 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:orientation="vertical"
-    tools:context="com.adamcrawford.geoscavenge.hunt.NewHuntActivity.NewHuntFragment">
+    tools:context=".MainActivity">
 
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/newName"
-        android:hint="@string/huntName"
-        android:layout_marginBottom="10dp"/>
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/huntDesc"
-        android:id="@+id/newDesc"
-        android:layout_marginBottom="10dp"/>
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="@string/priv"
-        android:id="@+id/newPrivate"
-        android:layout_marginBottom="10dp"/>
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="10dp">
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/addEnd"
-            android:src="@drawable/add_end"
-            style="?android:attr/borderlessButtonStyle"
-            android:id="@+id/addEndButton"
-            />
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:text="@string/addEnd"
-            android:gravity="center_vertical"
-            android:id="@+id/addEndHint"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        android:id="@+id/addEndContainer">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/numEnds"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"/>
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/addNumEnds"/>
-    </LinearLayout>
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="com.adamcrawford.geoscavenge.hunt.NewHuntFragment"
+        android:id="@+id/newHuntFrag"/>
 
-</LinearLayout>
+</RelativeLayout>

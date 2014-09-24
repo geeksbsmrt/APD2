@@ -1,4 +1,4 @@
-package com.adamcrawford.geoscavenge.hunt;
+package com.adamcrawford.geoscavenge.hunt.list;
 
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBAttribute;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBHashKey;
@@ -11,7 +11,6 @@ import java.io.Serializable;
  * Project: GeoScavenge
  * Package: com.adamcrawford.geoscavenge.hunt
  * File:    HuntItem
- * Purpose: TODO Minimum 2 sentence description
  */
 @DynamoDBTable(tableName = "public_hunts")
 public class HuntItem implements Serializable {
