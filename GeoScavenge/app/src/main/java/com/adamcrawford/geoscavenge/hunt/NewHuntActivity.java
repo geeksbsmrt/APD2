@@ -33,6 +33,7 @@ public class NewHuntActivity extends Activity implements NewHuntFragment.OnNewHu
         sIntent.putExtra("type", SyncService.SyncType.PUTITEM);
         sIntent.putExtra("mode", mode);
         sIntent.putExtra("hunt", hunt);
+        startService(sIntent);
         nhf.getActivity().finish();
     }
 }

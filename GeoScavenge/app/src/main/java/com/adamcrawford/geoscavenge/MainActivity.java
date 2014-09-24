@@ -48,11 +48,12 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
         isConnected = getStatus(this);
 
         if (isConnected) {
-            Integer currentHunt = preferences.getInt("currentHunt", -1);
-            if (currentHunt > 0) {
-                Log.i(TAG, currentHunt.toString());
+            String currentHunt = preferences.getString("currentHunt", "");
+            if (!currentHunt.equals("")) {
+                Log.i(TAG, currentHunt);
+                //TODO Fix this
                 String mode = preferences.getString("mode", "noMode");
-                Integer query = preferences.getInt("currentHunt", -1);
+                String query = preferences.getString("currentHunt", "");
                 if (mode.equals("public") || mode.equals("private")){
                     searchHunts(query, mode);
                 } else {
@@ -103,7 +104,7 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
         confirmStart(hunt);
     }
 
-    public static void searchHunts(Integer query, String mode) {
+    public static void searchHunts(String query, String mode) {
         Log.i(TAG, "Searching Hunts");
         Intent searchDynamo = new Intent(sContext, SyncService.class);
         searchDynamo.putExtra("type", SyncService.SyncType.SEARCH);
@@ -127,8 +128,8 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
         gIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         gIntent.putExtra("hunt", hunt);
         SharedPreferences.Editor edit = preferences.edit();
-        edit.putInt("currentHunt", hunt.getHuntID());
-        Log.i(TAG, String .valueOf(hunt.getHuntID()));
+        edit.putString("currentHunt", hunt.getHuntID());
+        Log.i(TAG, hunt.getHuntID());
         edit.apply();
         sContext.startActivity(gIntent);
     }

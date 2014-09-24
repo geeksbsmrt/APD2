@@ -47,10 +47,10 @@ public class Dialogs extends DialogFragment {
                 final Bundle args = getArguments();
                 View view = inflater.inflate(R.layout.fragment_details, null);
                 TextView details = (TextView) view.findViewById(R.id.huntDetails);
-                TextView guesses = (TextView) view.findViewById(R.id.detailGuesses);
+                TextView ends = (TextView) view.findViewById(R.id.detailEnds);
                 final HuntItem hunt = (HuntItem) args.getSerializable("hunt");
                 details.setText(hunt.getHuntDesc());
-                guesses.setText(hunt.getGuesses() + " " + getString(R.string.guesses));
+                ends.setText(hunt.getNumEnds());
                 builder.setView(view)
                         .setPositiveButton(R.string.start, new DialogInterface.OnClickListener() {
                            @Override
@@ -75,7 +75,7 @@ public class Dialogs extends DialogFragment {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 Dialog dialog = Dialogs.this.getDialog();
                                 EditText input = (EditText) dialog.findViewById(R.id.searchInput);
-                                Integer query = Integer.parseInt(input.getText().toString());
+                                String query = input.getText().toString();
                                 MainActivity.searchHunts(query, "private");
                             }
                         })

@@ -78,7 +78,7 @@ public class SyncService extends IntentService {
                     break;
                 }
                 case SEARCH: {
-                    Integer query = extras.getInt("query");
+                    String query = extras.getString("query");
                     msg.arg1 = MainActivity.RESULT_OK;
                     msg.arg2 = 1;
                     msg.obj = DynamoSearch.searchDynamo(credentialsProvider, query, mode);

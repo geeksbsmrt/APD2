@@ -1,4 +1,4 @@
-package com.adamcrawford.geoscavenge.hunt;
+package com.adamcrawford.geoscavenge.hunt.endpoint;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -10,47 +10,42 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import com.adamcrawford.geoscavenge.R;
-import com.adamcrawford.geoscavenge.hunt.endpoint.EndItem;
-import com.adamcrawford.geoscavenge.hunt.list.HuntItem;
-
-import java.util.ArrayList;
 
 /**
  * Author:  Adam Crawford
  * Project: GeoScavenge
- * Package: com.adamcrawford.geoscavenge.hunt
- * File:    NewHuntFragment
+ * Package: com.adamcrawford.geoscavenge.hunt.endpoint
+ * File:    NewEndpointFragment
  * Purpose: TODO Minimum 2 sentence description
  */
-public class NewHuntFragment extends Fragment {
-    OnNewHunt parentActivity;
-    TextView huntNameView;
-    TextView huntDescView;
-    CheckBox huntMode;
-    ArrayList<EndItem> endList;
+public class NewEndpointFragment extends Fragment {
+    OnNewEnd parentActivity;
+    ImageButton currentLoc;
+    ImageButton searchLoc;
+    ImageButton addPic;
+    EditText endLat;
+    EditText endLon;
+    EditText endDesc;
+    EditText endGuesses;
 
-
-    public NewHuntFragment() {
+    public NewEndpointFragment() {
     }
 
-    public interface OnNewHunt extends View.OnClickListener {
+    public interface OnNewEnd extends View.OnClickListener {
         @Override
         void onClick(View view);
-
-        void saveHunt(HuntItem hunt, String mode);
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        if (activity instanceof OnNewHunt) {
+        if (activity instanceof OnNewEnd) {
             try {
-                parentActivity = (OnNewHunt) activity;
+                parentActivity = (OnNewEnd) activity;
             } catch (ClassCastException e) {
                 throw new ClassCastException(activity.toString()
                         + " must implement OnGuess");
@@ -60,13 +55,18 @@ public class NewHuntFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.activity_new_hunt, container, false);
+        View rootView = inflater.inflate(R.layout.activity_new_endpoint, container, false);
         setHasOptionsMenu(true);
-        ImageButton addEndButton = (ImageButton) rootView.findViewById(R.id.addEndButton);
-        huntNameView = (TextView) rootView.findViewById(R.id.newName);
-        huntDescView = (TextView) rootView.findViewById(R.id.newDesc);
-        huntMode = (CheckBox) rootView.findViewById(R.id.newPrivate);
-        addEndButton.setOnClickListener(parentActivity);
+        currentLoc = (ImageButton) rootView.findViewById(R.id.getCurrent);
+        currentLoc.setOnClickListener(parentActivity);
+        searchLoc = (ImageButton) rootView.findViewById(R.id.searchAddress);
+        searchLoc.setOnClickListener(parentActivity);
+        addPic = (ImageButton) rootView.findViewById(R.id.addPic);
+        addPic.setOnClickListener(parentActivity);
+        endDesc = (EditText) rootView.findViewById(R.id.endDesc);
+        endLat = (EditText) rootView.findViewById(R.id.endLat);
+        endLon = (EditText) rootView.findViewById(R.id.endLon);
+        endGuesses = (EditText) rootView.findViewById(R.id.endGuesses);
         return rootView;
     }
 
@@ -86,13 +86,12 @@ public class NewHuntFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
+        switch (item.getItemId()){
             case android.R.id.home: {
                 //ask user if they want to save
             }
             case R.id.action_save: {
-                //TODO Save hunt via parentActivity.saveHunt(hunt, mode)
+                getActivity().finish();
             }
             default: {
                 return false;

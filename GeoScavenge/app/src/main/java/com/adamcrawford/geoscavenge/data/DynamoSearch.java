@@ -9,9 +9,6 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapperCo
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.amazonaws.services.dynamodbv2.model.GetItemRequest;
-import com.amazonaws.services.dynamodbv2.model.GetItemResult;
 
 /**
  * Author:  Adam Crawford
@@ -30,26 +27,17 @@ public class DynamoSearch {
         client.setRegion(usEast);
     }
 
-    public static HuntItem searchDynamo(CognitoCachingCredentialsProvider credentialsProvider, Integer query, String mode){
-        DynamoDBMapper mapper = new DynamoDBMapper(client);
+    public static HuntItem searchDynamo(CognitoCachingCredentialsProvider credentialsProvider, String query, String mode){
+        DynamoDBMapper mapper = new DynamoDBMapper(client);;
         init(credentialsProvider);
-        GetItemRequest request = new GetItemRequest();
         if (mode.equals("private")) {
-            request.setTableName("private_hunts");
             DynamoDBMapperConfig config = new DynamoDBMapperConfig(DynamoDBMapperConfig.TableNameOverride.withTableNameReplacement("private_hunts"));
-            mapper = new DynamoDBMapper(client, config);
+            return mapper.load(HuntItem.class, query, config);
         } else if (mode.equals("public")){
-            request.setTableName("public_hunts");
+            return mapper.load(HuntItem.class, query);
         } else {
             Log.wtf(TAG, "This should never happen");
+            return null;
         }
-        AttributeValue value = new AttributeValue();
-        value.setN(query.toString());
-        request.addKeyEntry("huntID", value);
-
-        GetItemResult result = client.getItem(request);
-        Log.i(TAG, result.getItem().toString());
-
-        return mapper.load(HuntItem.class, query);
     }
 }

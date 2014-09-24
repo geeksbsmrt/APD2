@@ -50,7 +50,8 @@ public class HuntAdapter extends ArrayAdapter<HuntItem> {
 
         holder.huntNameView.setText(hunt.getHuntName());
         holder.huntDescView.setText(hunt.getHuntDesc());
-        holder.huntLocation.setText(hunt.getHuntCity() + ", " + hunt.getHuntState());
+        holder.huntLocation.setText(hunt.getHuntEnds().get(0).getEndCity() + ", "
+                + hunt.getHuntEnds().get(0).getEndState());
 
         return convertView;
     }

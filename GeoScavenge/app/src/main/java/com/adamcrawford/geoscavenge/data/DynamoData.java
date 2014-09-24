@@ -8,11 +8,11 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapperConfig;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBScanExpression;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedScanList;
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
-import com.amazonaws.services.dynamodbv2.model.ScanRequest;
-import com.amazonaws.services.dynamodbv2.model.ScanResult;
 
 import org.json.JSONArray;
 
@@ -45,27 +45,14 @@ public class DynamoData {
         mapper = new DynamoDBMapper(client);
     }
 
-    private HuntItem load(int id) {
-        DynamoDBMapperConfig config = new DynamoDBMapperConfig(DynamoDBMapperConfig.ConsistentReads.CONSISTENT);
-        return mapper.load(HuntItem.class, id, config);
-    }
-
     private void getAllRows() {
-
-        ScanRequest scanRequest = new ScanRequest().withTableName("public_hunts");
-
         try {
-            ScanResult scanResponse = client.scan(scanRequest);
-
-            Log.i(TAG, scanResponse.getCount().toString());
-
-            for (int i = 0, j = scanResponse.getCount(); i < j ; i++) {
-                HuntItem hunt = load(i);
-                Log.e(TAG, hunt.getHuntID().toString());
-                Log.e(TAG, hunt.getHuntName());
-                huntArray.put(hunt);
+            DynamoDBMapperConfig config = new DynamoDBMapperConfig(DynamoDBMapperConfig.PaginationLoadingStrategy.EAGER_LOADING);
+            DynamoDBScanExpression scanEx = new DynamoDBScanExpression();
+            PaginatedScanList result = mapper.scan(HuntItem.class, scanEx, config);
+            for (Object item : result){
+                huntArray.put(item);
             }
-
         } catch (AmazonServiceException e) {
             Log.e(TAG, e.getMessage());
         } catch (AmazonClientException e) {

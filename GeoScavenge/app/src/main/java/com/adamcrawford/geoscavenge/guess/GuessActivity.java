@@ -48,7 +48,7 @@ public class GuessActivity extends Activity implements LocationListener, GuessFr
         if (prefGuesses > 0){
             guesses = prefGuesses;
         } else {
-            guesses = hunt.getGuesses();
+            guesses = hunt.getHuntEnds().get(0).getGuesses();
         }
         getLoc();
         gf = (GuessFrag) getFragmentManager().findFragmentById(R.id.guessFrag);
@@ -67,8 +67,9 @@ public class GuessActivity extends Activity implements LocationListener, GuessFr
 
         Location loc = lManager.getLastKnownLocation(lManager.getBestProvider(criteria, false));
         Location target = new Location("target");
-        target.setLatitude(hunt.getHuntLat());
-        target.setLongitude(hunt.getHuntLon());
+        //TODO UPDATE FOR CURRENT END
+        target.setLatitude(hunt.getHuntEnds().get(0).getEndLat());
+        target.setLongitude(hunt.getHuntEnds().get(0).getEndLon());
         Float dist = loc.distanceTo(target);
         Log.i(TAG, String.valueOf(dist));
         return dist;
