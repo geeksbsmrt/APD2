@@ -47,5 +47,6 @@
     <string name="ends">ends</string>
     <string name="addressHint">Address</string>
     <string name="notAvail">Searching by address is not available</string>
+    <string name="source">Select Image Source</string>
 
 </resources>

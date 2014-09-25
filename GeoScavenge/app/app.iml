@@ -82,11 +82,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="aws-android-sdk-2.1.0-s3" level="project" />
     <orderEntry type="library" exported="" name="aws-android-sdk-2.1.0-ddb-mapper" level="project" />
-    <orderEntry type="library" exported="" name="maps" level="project" />
-    <orderEntry type="library" exported="" name="support-v4-19.1.0" level="project" />
     <orderEntry type="library" exported="" name="aws-android-sdk-2.1.0-ddb" level="project" />
     <orderEntry type="library" exported="" name="aws-android-sdk-2.1.0-cognito" level="project" />
-    <orderEntry type="library" exported="" name="play-services-5.2.08" level="project" />
     <orderEntry type="library" exported="" name="annotations" level="project" />
     <orderEntry type="library" exported="" name="aws-android-sdk-2.1.0-core" level="project" />
   </component>

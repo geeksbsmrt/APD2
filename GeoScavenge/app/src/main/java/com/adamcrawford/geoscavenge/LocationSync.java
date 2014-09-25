@@ -38,6 +38,7 @@ public class LocationSync implements LocationListener {
     public void init(Activity act){
         LocationSync lSync = LocationSync.getInstance();
         lSync.lManager = (LocationManager) act.getSystemService(Context.LOCATION_SERVICE);
+        lSync.activity = act;
         lSync.startSync();
     }
 
@@ -77,7 +78,7 @@ public class LocationSync implements LocationListener {
         }
     }
 
-        private LocationSync() {
+    private LocationSync() {
     }
 
     private void startSync(){
@@ -109,7 +110,9 @@ public class LocationSync implements LocationListener {
     }
 
     protected LocationListener bestInactiveLocationProviderListener = new LocationListener() {
-        public void onLocationChanged(Location l) {}
+        public void onLocationChanged(Location l) {
+            Log.i(TAG, "loc changed");
+        }
         public void onProviderDisabled(String provider) {}
         public void onStatusChanged(String provider, int status, Bundle extras) {}
         public void onProviderEnabled(String provider) {
