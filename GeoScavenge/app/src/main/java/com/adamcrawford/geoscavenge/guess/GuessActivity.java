@@ -35,24 +35,30 @@ public class GuessActivity extends Activity implements GuessFrag.OnGuess {
         hunt = (HuntItem) extras.get("hunt");
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         Integer prefGuesses = preferences.getInt("guesses", -1);
-        currentDist = preferences.getString("pastDist", "");
-        pastDist = preferences.getString("currentDist", "");
-        if (prefGuesses > 0){
+
+        if (prefGuesses > 0 && hunt.getHuntID().equals(preferences.getString("currentHunt", ""))){
             guesses = prefGuesses;
+            currentDist = preferences.getString("pastDist", "");
+            pastDist = preferences.getString("currentDist", "");
+            if (!(pastDist.equals(""))){
+                gf.pastGuess.setText(pastDist);
+                gf.pastContainer.setVisibility(View.VISIBLE);
+            }
+            if (!(currentDist.equals(""))){
+                gf.currentGuess.setText(currentDist);
+                gf.currentContainer.setVisibility(View.VISIBLE);
+            }
         } else {
+            SharedPreferences.Editor edit = preferences.edit();
+            edit.putString("currentHunt", hunt.getHuntID());
+            edit.putString("type", hunt.getHuntType());
+            edit.apply();
+            //TODO Update based on endPoint number
             guesses = hunt.getHuntEnds().get(0).getGuesses();
         }
         LocationSync.getInstance().init(this);
         gf = (GuessFrag) getFragmentManager().findFragmentById(R.id.guessFrag);
         gf.gRemain.setText(String.valueOf(guesses));
-        if (!(pastDist.equals(""))){
-            gf.pastGuess.setText(pastDist);
-            gf.pastContainer.setVisibility(View.VISIBLE);
-        }
-        if (!(currentDist.equals(""))){
-            gf.currentGuess.setText(currentDist);
-            gf.currentContainer.setVisibility(View.VISIBLE);
-        }
     }
 
     public Float getDist(){

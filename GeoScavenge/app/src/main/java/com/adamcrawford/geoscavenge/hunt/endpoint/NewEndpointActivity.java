@@ -35,8 +35,8 @@ public class NewEndpointActivity extends Activity implements NewEndpointFragment
     LocationSync lSync;
     NewEndpointFragment nef;
     String TAG = "NEA";
-    String photoStore;
     Uri fileUri;
+    Uri imageUri;
     File photoFile;
 
     @Override
@@ -55,11 +55,7 @@ public class NewEndpointActivity extends Activity implements NewEndpointFragment
         String imageFileName = "Geo_" + timeStamp;
         File storageDir = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES);
-        File image = new File(storageDir, imageFileName + ".jpg");
-
-        // Save a file: path for use with ACTION_VIEW intents
-        photoStore = "file:" + image.getAbsolutePath();
-        return image;
+        return new File(storageDir, imageFileName + ".jpg");
     }
 
     private void getImage() {
@@ -104,7 +100,6 @@ public class NewEndpointActivity extends Activity implements NewEndpointFragment
                     isCamera = action != null && action.equals(MediaStore.ACTION_IMAGE_CAPTURE);
                 }
 
-                Uri imageUri;
                 if(isCamera) {
                     imageUri = fileUri;
                     Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);

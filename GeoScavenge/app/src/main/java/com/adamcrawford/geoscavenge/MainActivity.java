@@ -120,14 +120,10 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
         dialog.show(getFragmentManager(), "details");
     }
 
-    static void startHunt(HuntItem hunt) {
-        Intent gIntent = new Intent(sContext, GuessActivity.class);
-        gIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    static void startHunt(HuntItem hunt, Context c) {
+        Intent gIntent = new Intent(c, GuessActivity.class);
+        //gIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         gIntent.putExtra("hunt", hunt);
-        SharedPreferences.Editor edit = preferences.edit();
-        edit.putString("currentHunt", hunt.getHuntID());
-        edit.putString("type", hunt.getHuntType());
-        edit.apply();
         sContext.startActivity(gIntent);
     }
 
@@ -162,7 +158,7 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
                             if (preferences.getString("currentHunt", "").equals("")) {
                                 activity.confirmStart(hunt);
                             } else {
-                                startHunt(hunt);
+                                startHunt(hunt, activity.getApplicationContext());
                             }
                             break;
                         } else {

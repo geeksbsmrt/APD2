@@ -55,7 +55,7 @@ public class Dialogs extends DialogFragment {
                         .setPositiveButton(R.string.start, new DialogInterface.OnClickListener() {
                            @Override
                            public void onClick(DialogInterface dialogInterface, int i) {
-                               MainActivity.startHunt(hunt);
+                               MainActivity.startHunt(hunt, getActivity().getApplicationContext());
                            }
                        })
                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
