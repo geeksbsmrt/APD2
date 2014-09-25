@@ -1,29 +1,23 @@
 package com.adamcrawford.geoscavenge.guess;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 
 import com.adamcrawford.geoscavenge.Dialogs;
+import com.adamcrawford.geoscavenge.LocationSync;
 import com.adamcrawford.geoscavenge.MainActivity;
 import com.adamcrawford.geoscavenge.R;
 import com.adamcrawford.geoscavenge.hunt.list.HuntItem;
 
 
-public class GuessActivity extends Activity implements LocationListener, GuessFrag.OnGuess {
+public class GuessActivity extends Activity implements GuessFrag.OnGuess {
 
     Bundle extras;
-    LocationManager lManager;
-    Criteria criteria;
     String TAG = "GA";
     HuntItem hunt;
     Integer guesses;
@@ -40,8 +34,6 @@ public class GuessActivity extends Activity implements LocationListener, GuessFr
         extras = getIntent().getExtras();
         hunt = (HuntItem) extras.get("hunt");
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        lManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
-
         Integer prefGuesses = preferences.getInt("guesses", -1);
         currentDist = preferences.getString("pastDist", "");
         pastDist = preferences.getString("currentDist", "");
@@ -50,7 +42,7 @@ public class GuessActivity extends Activity implements LocationListener, GuessFr
         } else {
             guesses = hunt.getHuntEnds().get(0).getGuesses();
         }
-        getLoc();
+        LocationSync.getInstance().init(this);
         gf = (GuessFrag) getFragmentManager().findFragmentById(R.id.guessFrag);
         gf.gRemain.setText(String.valueOf(guesses));
         if (!(pastDist.equals(""))){
@@ -65,7 +57,7 @@ public class GuessActivity extends Activity implements LocationListener, GuessFr
 
     public Float getDist(){
 
-        Location loc = lManager.getLastKnownLocation(lManager.getBestProvider(criteria, false));
+        Location loc = LocationSync.getInstance().getLoc();
         Location target = new Location("target");
         //TODO UPDATE FOR CURRENT END
         target.setLatitude(hunt.getHuntEnds().get(0).getEndLat());
@@ -73,66 +65,6 @@ public class GuessActivity extends Activity implements LocationListener, GuessFr
         Float dist = loc.distanceTo(target);
         Log.i(TAG, String.valueOf(dist));
         return dist;
-    }
-
-    private void getLoc(){
-
-        Log.i(TAG, "In getloc");
-        if(!(lManager.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER)))
-        {
-            MainActivity.printToast(getString(R.string.noGPS));
-            Intent myIntent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS );
-            startActivity(myIntent);
-        }
-
-        criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-
-        if (lManager != null){
-
-            Log.i(TAG, "lManager exists");
-
-            // Normal updates while activity is visible.
-            lManager.requestLocationUpdates(2*1000, 0, criteria, this, null);
-            //lManager.requestLocationUpdates("gps", 2*1000, 0, this);
-
-            // Register a receiver that listens for when a better provider than I'm using becomes available.
-            String bestProvider = lManager.getBestProvider(criteria, false);
-            String bestAvailableProvider = lManager.getBestProvider(criteria, true);
-            if (bestProvider != null && !bestProvider.equals(bestAvailableProvider)) {
-                Log.i(TAG, "better provider");
-                lManager.requestLocationUpdates(bestProvider, 0, 0, bestInactiveLocationProviderListener, getMainLooper());
-            }
-        }
-    }
-
-    protected LocationListener bestInactiveLocationProviderListener = new LocationListener() {
-        public void onLocationChanged(Location l) {}
-        public void onProviderDisabled(String provider) {}
-        public void onStatusChanged(String provider, int status, Bundle extras) {}
-        public void onProviderEnabled(String provider) {
-            Log.e(TAG, "Better accuracy");
-            getLoc();
-        }
-    };
-
-    @Override
-    public void onLocationChanged(Location l) {
-    }
-
-    @Override
-    public void onStatusChanged(String s, int i, Bundle bundle) {
-        Log.i(TAG, "Status Changed");
-    }
-
-    @Override
-    public void onProviderEnabled(String s) {
-        Log.i(TAG, "Provider Enabled");
-    }
-
-    @Override
-    public void onProviderDisabled(String s) {
-        Log.i(TAG, "Disabled");
     }
 
     @Override
@@ -178,16 +110,13 @@ public class GuessActivity extends Activity implements LocationListener, GuessFr
 
     @Override
     protected void onPause() {
-        if (lManager != null) {
-            lManager.removeUpdates(this);
-        }
+        LocationSync.getInstance().quit();
         super.onPause();
     }
 
-
     @Override
     protected void onResume() {
-        getLoc();
+        LocationSync.getInstance().init(this);
         super.onResume();
     }
 

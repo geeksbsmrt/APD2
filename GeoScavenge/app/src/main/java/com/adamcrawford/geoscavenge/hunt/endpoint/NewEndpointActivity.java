@@ -19,5 +19,23 @@ public class NewEndpointActivity extends Activity implements NewEndpointFragment
     @Override
     public void onClick(View view) {
 
+        switch (view.getId()){
+            case R.id.getCurrent:{
+
+                break;
+            }
+            case R.id.searchAddress:{
+
+                break;
+            }
+            case R.id.addPic:{
+
+                break;
+            }
+            default:{
+                break;
+            }
+        }
+
     }
 }
