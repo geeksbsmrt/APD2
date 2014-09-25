@@ -50,10 +50,7 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
             //TODO FIX THIS!
             String currentHunt = preferences.getString("currentHunt", "");
             if (!currentHunt.equals("")) {
-                Log.i(TAG, currentHunt);
-
                 String mode = preferences.getString("type", "noType");
-                Log.i(TAG, mode);
                 String query = preferences.getString("currentHunt", "");
                 if (mode.equals("public") || mode.equals("private")){
                     searchHunts(query, mode);
@@ -67,6 +64,7 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
             Dialogs dialog = Dialogs.newInstance(Dialogs.DialogType.NETWORK);
             dialog.show(getFragmentManager(), "Network");
         }
+
     }
 
     private void sendData(ArrayList<HuntItem> hunts){
@@ -129,12 +127,7 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
         gIntent.putExtra("hunt", hunt);
         SharedPreferences.Editor edit = preferences.edit();
         edit.putString("currentHunt", hunt.getHuntID());
-        if (hunt.getHuntType().equals("")) {
-            edit.putString("type", "public");
-        } else {
-            edit.putString("type", hunt.getHuntType());
-        }
-        Log.i(TAG, hunt.getHuntID());
+        edit.putString("type", hunt.getHuntType());
         edit.apply();
         sContext.startActivity(gIntent);
     }
@@ -167,7 +160,11 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
                     case 1: {
                         if (msg.arg1 == RESULT_OK && msg.obj != null) {
                             HuntItem hunt = (HuntItem) msg.obj;
-                            activity.confirmStart(hunt);
+                            if (preferences.getString("currentHunt", "").equals("")) {
+                                activity.confirmStart(hunt);
+                            } else {
+                                startHunt(hunt);
+                            }
                             break;
                         } else {
                             printToast(activity.getString(R.string.notFound));
