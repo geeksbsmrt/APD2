@@ -47,7 +47,6 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
         isConnected = getStatus(this);
 
         if (isConnected) {
-            //TODO FIX THIS!
             String currentHunt = preferences.getString("currentHunt", "");
             if (!currentHunt.equals("")) {
                 String mode = preferences.getString("type", "noType");
