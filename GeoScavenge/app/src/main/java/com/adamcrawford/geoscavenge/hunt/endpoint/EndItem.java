@@ -1,6 +1,7 @@
 package com.adamcrawford.geoscavenge.hunt.endpoint;
 
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBAttribute;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBHashKey;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBTable;
 
 import java.io.Serializable;
@@ -14,6 +15,8 @@ import java.io.Serializable;
  */
 @DynamoDBTable(tableName = "pub_hunt_ends")
 public class EndItem implements Serializable {
+
+    private String huntID;
     private String endDesc;
     private Integer guesses;
     private String endCity;
@@ -21,6 +24,14 @@ public class EndItem implements Serializable {
     private double endLon;
     private String endImg;
     private String endState;
+
+    @DynamoDBHashKey(attributeName = "huntID")
+    public String getHuntID() {
+        return huntID;
+    }
+    public void setHuntID(String huntID) {
+        this.huntID = huntID;
+    }
 
     @DynamoDBAttribute(attributeName = "endDesc")
     public String getEndDesc() {

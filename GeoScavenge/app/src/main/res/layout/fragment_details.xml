@@ -17,13 +17,13 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/numEnds"
-            android:layout_weight=".6"/>
+            android:layout_weight=".5"/>
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/detailEnds"
             android:text="@string/ends"
-            android:layout_weight=".4"/>
+            android:layout_weight=".5"/>
     </LinearLayout>
 
 </LinearLayout>

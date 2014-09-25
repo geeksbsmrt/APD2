@@ -14,7 +14,7 @@ import com.adamcrawford.geoscavenge.hunt.list.HuntItem;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.regions.Regions;
 
-import org.json.JSONArray;
+import java.util.ArrayList;
 
 /**
  * Author:  Adam Crawford
@@ -35,7 +35,7 @@ public class SyncService extends IntentService {
     }
 
     public static Context sContext;
-    JSONArray huntArray;
+    ArrayList huntArray;
 
     public SyncService() {
         super("SyncService");

@@ -19,9 +19,8 @@ import com.adamcrawford.geoscavenge.data.SyncService;
 import com.adamcrawford.geoscavenge.guess.GuessActivity;
 import com.adamcrawford.geoscavenge.hunt.list.HuntItem;
 
-import org.json.JSONArray;
-
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 
 
 public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
@@ -48,27 +47,29 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
         isConnected = getStatus(this);
 
         if (isConnected) {
-            String currentHunt = preferences.getString("currentHunt", "");
-            if (!currentHunt.equals("")) {
-                Log.i(TAG, currentHunt);
-                //TODO Fix this
-                String mode = preferences.getString("mode", "noMode");
-                String query = preferences.getString("currentHunt", "");
-                if (mode.equals("public") || mode.equals("private")){
-                    searchHunts(query, mode);
-                } else {
-                    Log.wtf(TAG, "should not be here");
-                }
-            } else {
-                getData();
-            }
+            //TODO FIX THIS!
+//            String currentHunt = preferences.getString("currentHunt", "");
+//            if (!currentHunt.equals("")) {
+//                Log.i(TAG, currentHunt);
+//
+//                String mode = preferences.getString("mode", "noMode");
+//                String query = preferences.getString("currentHunt", "");
+//                if (mode.equals("public") || mode.equals("private")){
+//                    searchHunts(query, mode);
+//                } else {
+//                    Log.wtf(TAG, "should not be here");
+//                }
+//            } else {
+//                getData();
+//            }
+            getData();
         } else {
             Dialogs dialog = Dialogs.newInstance(Dialogs.DialogType.NETWORK);
             dialog.show(getFragmentManager(), "Network");
         }
     }
 
-    private void sendData(JSONArray hunts){
+    private void sendData(ArrayList<HuntItem> hunts){
         lf.newData(hunts);
     }
 
@@ -148,7 +149,7 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
             if (activity != null) {
                 switch (msg.arg2){
                     case 0: {
-                        JSONArray returned = (JSONArray) msg.obj;
+                        ArrayList<HuntItem> returned = (ArrayList<HuntItem>) msg.obj;
                         if (msg.arg1 == RESULT_OK && returned != null) {
                             Log.i(TAG, "Data returned");
                             activity.sendData(returned);

@@ -50,7 +50,7 @@ public class Dialogs extends DialogFragment {
                 TextView ends = (TextView) view.findViewById(R.id.detailEnds);
                 final HuntItem hunt = (HuntItem) args.getSerializable("hunt");
                 details.setText(hunt.getHuntDesc());
-                ends.setText(hunt.getNumEnds());
+                ends.setText(hunt.getNumEnds().toString());
                 builder.setView(view)
                         .setPositiveButton(R.string.start, new DialogInterface.OnClickListener() {
                            @Override

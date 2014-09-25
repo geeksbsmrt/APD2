@@ -18,8 +18,6 @@ import com.adamcrawford.geoscavenge.hunt.list.HuntAdapter;
 import com.adamcrawford.geoscavenge.hunt.list.HuntItem;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -62,24 +60,13 @@ public class ListFrag extends ListFragment {
         return listView;
     }
 
-    public void newData(JSONArray returned){
-        ArrayList<HuntItem> huntList = new ArrayList<HuntItem>();
+    public void newData(ArrayList<HuntItem> returned){
         if (returned != null ){
-            try {
-                Log.i(TAG, "Building list");
-                for (int i = 0, j = returned.length(); i < j; i++) {
-                    HuntItem hc = (HuntItem) returned.get(i);
-                    huntList.add(hc);
-                }
-
-                Log.i(TAG, "building adapter");
-                HuntAdapter adapter = new HuntAdapter(MainActivity.sContext, R.layout.item_hunt, huntList);
-                adapter.notifyDataSetChanged();
-                Log.i(TAG,"Setting Adapter");
-                setListAdapter(adapter);
-            } catch (JSONException e) {
-                Log.e(TAG, e.getMessage());
-            }
+            Log.i(TAG, "building adapter");
+            HuntAdapter adapter = new HuntAdapter(MainActivity.sContext, R.layout.item_hunt, returned);
+            adapter.notifyDataSetChanged();
+            Log.i(TAG,"Setting Adapter");
+            setListAdapter(adapter);
         }
     }
 
