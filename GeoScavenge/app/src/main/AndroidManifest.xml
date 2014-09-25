@@ -42,6 +42,9 @@
                 android:value="com.adamcrawford.geoscavenge.hunt.NewHuntActivity" />
         </activity>
         <service android:name=".data.SyncService"/>
+        <meta-data android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <uses-library android:name="com.google.android.maps" />
     </application>
 
 </manifest>

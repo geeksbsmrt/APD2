@@ -3,13 +3,17 @@ package com.adamcrawford.geoscavenge;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+
+import java.util.List;
 
 /**
  * Author:  Adam Crawford
@@ -48,7 +52,32 @@ public class LocationSync implements LocationListener {
         return lManager.getLastKnownLocation(lManager.getBestProvider(criteria, false));
     }
 
-    private LocationSync() {
+    public Address getLocationFromAddress(String strAddress, Context applicationContext) {
+
+        if (Geocoder.isPresent()){
+            Log.i(TAG, "Geocoder Present");
+            Geocoder coder = new Geocoder(applicationContext);
+            List<Address> address = null;
+
+            try {
+                while (address == null) {
+                    address = coder.getFromLocationName(strAddress, 5);
+                }
+                Address location = address.get(0);
+                location.getLatitude();
+                location.getLongitude();
+                return location;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        } else {
+            Log.e(TAG, "No Geocoder");
+            return null;
+        }
+    }
+
+        private LocationSync() {
     }
 
     private void startSync(){

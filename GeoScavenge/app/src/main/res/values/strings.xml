@@ -45,5 +45,7 @@
     <string name="huntLoc">Hunt City, Hunt State</string>
     <string name="setGuesses">Set Guesses</string>
     <string name="ends">ends</string>
+    <string name="addressHint">Address</string>
+    <string name="notAvail">Searching by address is not available</string>
 
 </resources>
