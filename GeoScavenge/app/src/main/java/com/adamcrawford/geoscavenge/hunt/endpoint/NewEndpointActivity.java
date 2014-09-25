@@ -88,9 +88,7 @@ public class NewEndpointActivity extends Activity implements NewEndpointFragment
         gallery.setAction(Intent.ACTION_PICK);
 
         Intent chooser = Intent.createChooser(gallery, "Select Source");
-
         chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, cams.toArray(new Parcelable[cams.size()]));
-
         startActivityForResult(chooser, 0);
     }
 
