@@ -37,12 +37,35 @@ public class DynamoData {
         return data.getAllHunts();
     }
 
+    public static HuntItem searchDynamo(CognitoCachingCredentialsProvider credentialsProvider, String query, String mode){
+        DynamoData data = new DynamoData();
+        data.init(credentialsProvider);
+        return data.searchHunts(query, mode);
+    }
+
+    public static void putItem(CognitoCachingCredentialsProvider credentialsProvider, HuntItem hunt, String mode){
+        DynamoData data = new DynamoData();
+        data.init(credentialsProvider);
+        data.sendItem(hunt, mode);
+    }
+
     private void init(CognitoCachingCredentialsProvider credentialsProvider) {
         Log.i(TAG, "INIT");
         client = new AmazonDynamoDBClient(credentialsProvider);
         Region usEast = Region.getRegion(Regions.US_EAST_1);
         client.setRegion(usEast);
         mapper = new DynamoDBMapper(client);
+    }
+
+    private void sendItem(HuntItem hunt, String mode){
+        if (mode.equals("private")) {
+            DynamoDBMapperConfig config = new DynamoDBMapperConfig(DynamoDBMapperConfig.TableNameOverride.withTableNameReplacement("private_hunts"));
+            mapper.save(hunt, config);
+        } else if (mode.equals("public")){
+            mapper.save(hunt);
+        } else {
+            Log.wtf(TAG, "This should never happen");
+        }
     }
 
     private ArrayList<HuntItem> getAllHunts() {
@@ -56,7 +79,7 @@ public class DynamoData {
                 ArrayList<EndItem> ends = getEnds(hunt.getHuntID());
                 hunt.setHuntEnds(ends);
                 hunt.setNumEnds(ends.size());
-                Log.i(TAG, ends.toString());
+                hunt.setHuntType("public");
                 array.add(hunt);
             }
             return array;
@@ -68,12 +91,31 @@ public class DynamoData {
         return null;
     }
 
+    private HuntItem searchHunts(String query, String mode){
+        HuntItem hunt;
+        DynamoDBMapper mapper = new DynamoDBMapper(client);
+        if (mode.equals("private")) {
+            DynamoDBMapperConfig config = new DynamoDBMapperConfig(DynamoDBMapperConfig.TableNameOverride.withTableNameReplacement("private_hunts"));
+            hunt = mapper.load(HuntItem.class, query, config);
+            hunt.setHuntType("private");
+        } else if (mode.equals("public")){
+            hunt = mapper.load(HuntItem.class, query);
+            hunt.setHuntType("public");
+        } else {
+            Log.wtf(TAG, "This should never happen");
+            return null;
+        }
+        ArrayList<EndItem> ends = getEnds(hunt.getHuntID());
+        hunt.setHuntEnds(ends);
+        hunt.setNumEnds(ends.size());
+        return hunt;
+    }
+
     private ArrayList<EndItem> getEnds(String huntID) {
         ArrayList<EndItem> ends = new ArrayList<EndItem>();
         try {
             EndItem endKey = new EndItem();
             endKey.setHuntID(huntID);
-            Log.i(TAG, endKey.getHuntID());
             DynamoDBMapperConfig config = new DynamoDBMapperConfig(DynamoDBMapperConfig.PaginationLoadingStrategy.EAGER_LOADING);
             DynamoDBQueryExpression<EndItem> queryEx = new DynamoDBQueryExpression<EndItem>().withHashKeyValues(endKey);
             List<EndItem> result = mapper.query(EndItem.class, queryEx, config);

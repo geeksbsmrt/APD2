@@ -21,6 +21,7 @@ public class HuntItem implements Serializable {
     private String huntID;
     private String huntDesc;
     private String huntName;
+    private String huntType;
     private Integer numEnds;
     private ArrayList<EndItem> huntEnds;
 
@@ -63,5 +64,12 @@ public class HuntItem implements Serializable {
     }
     public void setHuntEnds(ArrayList<EndItem> huntEnds) {
         this.huntEnds = huntEnds;
+    }
+
+    public String getHuntType() {
+        return huntType;
+    }
+    public void setHuntType(String huntType) {
+        this.huntType = huntType;
     }
 }

@@ -81,11 +81,11 @@ public class SyncService extends IntentService {
                     String query = extras.getString("query");
                     msg.arg1 = MainActivity.RESULT_OK;
                     msg.arg2 = 1;
-                    msg.obj = DynamoSearch.searchDynamo(credentialsProvider, query, mode);
+                    msg.obj = DynamoData.searchDynamo(credentialsProvider, query, mode);
                     break;
                 }
                 case PUTITEM: {
-                    DynamoPut.putItem(credentialsProvider, (HuntItem) extras.get("hunt"), mode);
+                    DynamoData.putItem(credentialsProvider, (HuntItem) extras.get("hunt"), mode);
                     msg.arg1 = MainActivity.RESULT_OK;
                     msg.arg2 = 2;
                     break;

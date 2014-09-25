@@ -48,21 +48,21 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
 
         if (isConnected) {
             //TODO FIX THIS!
-//            String currentHunt = preferences.getString("currentHunt", "");
-//            if (!currentHunt.equals("")) {
-//                Log.i(TAG, currentHunt);
-//
-//                String mode = preferences.getString("mode", "noMode");
-//                String query = preferences.getString("currentHunt", "");
-//                if (mode.equals("public") || mode.equals("private")){
-//                    searchHunts(query, mode);
-//                } else {
-//                    Log.wtf(TAG, "should not be here");
-//                }
-//            } else {
-//                getData();
-//            }
-            getData();
+            String currentHunt = preferences.getString("currentHunt", "");
+            if (!currentHunt.equals("")) {
+                Log.i(TAG, currentHunt);
+
+                String mode = preferences.getString("type", "noType");
+                Log.i(TAG, mode);
+                String query = preferences.getString("currentHunt", "");
+                if (mode.equals("public") || mode.equals("private")){
+                    searchHunts(query, mode);
+                } else {
+                    Log.wtf(TAG, "should not be here");
+                }
+            } else {
+                getData();
+            }
         } else {
             Dialogs dialog = Dialogs.newInstance(Dialogs.DialogType.NETWORK);
             dialog.show(getFragmentManager(), "Network");
@@ -118,7 +118,6 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
     void confirmStart(HuntItem hunt) {
         Dialogs dialog = Dialogs.newInstance(Dialogs.DialogType.DETAILS);
         Bundle args = new Bundle();
-
         args.putSerializable("hunt", hunt);
         dialog.setArguments(args);
         dialog.show(getFragmentManager(), "details");
@@ -130,6 +129,11 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
         gIntent.putExtra("hunt", hunt);
         SharedPreferences.Editor edit = preferences.edit();
         edit.putString("currentHunt", hunt.getHuntID());
+        if (hunt.getHuntType().equals("")) {
+            edit.putString("type", "public");
+        } else {
+            edit.putString("type", hunt.getHuntType());
+        }
         Log.i(TAG, hunt.getHuntID());
         edit.apply();
         sContext.startActivity(gIntent);
