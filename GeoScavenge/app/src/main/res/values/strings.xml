@@ -24,6 +24,8 @@
     <string name="title_activity_new_hunt">New Hunt</string>
     <string name="save">Save</string>
     <string name="priv">Make Private</string>
+    <string name="huntID">Private Hunt ID</string>
+    <string name="keep">Please save this id.</string>
     <string name="addEnd">Add Endpoint</string>
     <string name="numEnds">Number of Endpoints: </string>
     <string name="title_activity_new_endpoint">New Endpoint</string>
@@ -48,5 +50,12 @@
     <string name="addressHint">Address</string>
     <string name="notAvail">Searching by address is not available</string>
     <string name="source">Select Image Source</string>
+    <string name="required">All fields except image are required.</string>
+    <string name="askSave">Would you like to save?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="noEnds">Please enter at least one endpoint.</string>
+    <string name="next">Next</string>
+    <string name="unknown">Unknown</string>
 
 </resources>

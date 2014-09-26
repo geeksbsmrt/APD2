@@ -49,8 +49,31 @@ public class LocationSync implements LocationListener {
         }
     }
 
-    public Location getLoc(){
+    public Location getCurrentLoc(){
         return lManager.getLastKnownLocation(lManager.getBestProvider(criteria, false));
+    }
+
+    public Address getLocation(Double lat, Double lon, Context c){
+        if (Geocoder.isPresent()){
+            Geocoder coder = new Geocoder(c);
+            List<Address> address = null;
+
+            try {
+                while (address == null) {
+                    address = coder.getFromLocation(lat, lon, 5);
+                }
+                Address location = address.get(0);
+                Log.i(TAG, location.toString());
+                location.getLatitude();
+                location.getLongitude();
+                return location;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        } else {
+            return null;
+        }
     }
 
     public Address getLocationFromAddress(String strAddress, Context applicationContext) {

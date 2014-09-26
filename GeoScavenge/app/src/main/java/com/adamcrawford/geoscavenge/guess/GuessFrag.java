@@ -17,7 +17,6 @@ import com.adamcrawford.geoscavenge.R;
  * Project: GeoScavenge
  * Package: com.adamcrawford.geoscavenge
  * File:    GuessFrag
- * Purpose: TODO Minimum 2 sentence description
  */
 public class GuessFrag extends Fragment {
     OnGuess parentActivity;
@@ -57,10 +56,6 @@ public class GuessFrag extends Fragment {
         pastGuess = (TextView) rootView.findViewById(R.id.pastGuess);
         ImageButton gButton = (ImageButton) rootView.findViewById(R.id.guessButton);
         gButton.setOnClickListener(parentActivity);
-
-        //TODO Get information from SharedPrefs about hunt when returning to it
-
-
         return rootView;
     }
 }

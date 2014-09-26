@@ -44,7 +44,7 @@ public class Dialogs extends DialogFragment {
 
         switch (type){
             case DETAILS: {
-                final Bundle args = getArguments();
+                Bundle args = getArguments();
                 View view = inflater.inflate(R.layout.fragment_details, null);
                 TextView details = (TextView) view.findViewById(R.id.huntDetails);
                 TextView ends = (TextView) view.findViewById(R.id.detailEnds);
@@ -89,9 +89,32 @@ public class Dialogs extends DialogFragment {
             }
             case FOUND: {
                 Log.i(TAG, "Found");
-                builder.setView(inflater.inflate(R.layout.fragment_found, null))
-                       .setTitle(R.string.locFound);
-                //TODO Implement logic to determine if last endpoint create buttons accordingly
+                Bundle args = getArguments();
+                final HuntItem hunt = (HuntItem) args.getSerializable("hunt");
+                Integer currentEnd = Integer.parseInt(args.getString("currentEnd"));
+                View view = inflater.inflate(R.layout.fragment_found, null);
+                TextView endDesc = (TextView) view.findViewById(R.id.foundDesc);
+//                ImageView imgView = (ImageView) view.findViewById(R.id.foundImg);
+//                imgView.setImageURI(Uri.fromFile(new File(args.getString("endImg"))));
+                endDesc.setText(hunt.getHuntEnds().get(currentEnd).getEndDesc());
+                builder.setView(view)
+                        .setTitle(R.string.locFound);
+                if (hunt.getHuntEnds().size() > currentEnd+1) {
+                    //Another endpoint
+                    builder.setPositiveButton(R.string.next, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            MainActivity.startHunt(hunt, getActivity().getApplicationContext());
+                        }
+                    });
+                } else {
+                    builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Dialogs.this.getDialog().cancel();
+                        }
+                    });
+                }
                 break;
             }
             case NETWORK: {

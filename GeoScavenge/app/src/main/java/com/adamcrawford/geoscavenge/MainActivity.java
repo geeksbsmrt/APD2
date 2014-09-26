@@ -30,7 +30,7 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
     public static FragmentManager sFragManager;
     public static SharedPreferences preferences;
     public static Boolean isConnected;
-    DataHandler handler;
+    public static DataHandler handler;
     private ListFrag lf;
     public static Messenger msgr;
 
@@ -122,7 +122,6 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
 
     static void startHunt(HuntItem hunt, Context c) {
         Intent gIntent = new Intent(c, GuessActivity.class);
-        //gIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         gIntent.putExtra("hunt", hunt);
         sContext.startActivity(gIntent);
     }
@@ -164,6 +163,21 @@ public class MainActivity extends Activity implements ListFrag.OnHuntSelected {
                         } else {
                             printToast(activity.getString(R.string.notFound));
                             break;
+                        }
+                    }
+                    case 3: {
+                        if (msg.arg1 == RESULT_OK && msg.obj != null) {
+                            Bundle extras = (Bundle) msg.obj;
+                            HuntItem hunt = (HuntItem) extras.get("hunt");
+                            String currentEnd = extras.getString("currentEnd");
+                            //String endImg = extras.getString("endImg");
+                            Dialogs dialog = Dialogs.newInstance(Dialogs.DialogType.FOUND);
+                            Bundle args = new Bundle();
+                            args.putSerializable("hunt", hunt);
+                            args.putString("currentEnd", currentEnd);
+                            //args.putString("endImg", endImg);
+                            dialog.setArguments(args);
+                            dialog.show(MainActivity.sFragManager, "found");
                         }
                     }
                     default:{

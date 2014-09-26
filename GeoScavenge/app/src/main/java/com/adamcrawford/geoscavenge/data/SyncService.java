@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.adamcrawford.geoscavenge.MainActivity;
 import com.adamcrawford.geoscavenge.hunt.list.HuntItem;
+import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.regions.Regions;
 
@@ -30,7 +31,6 @@ public class SyncService extends IntentService {
         LISTDATA,
         SEARCH,
         PUTITEM,
-        PUTIMG,
         GETIMG
     }
 
@@ -56,6 +56,18 @@ public class SyncService extends IntentService {
             mode = extras.getString("mode");
         }
         Message msg = Message.obtain();
+
+        AWSCredentials creds = new AWSCredentials() {
+            @Override
+            public String getAWSAccessKeyId() {
+                return "AKIAIU4VKIQ2LIB27FVA";
+            }
+
+            @Override
+            public String getAWSSecretKey() {
+                return "OQonIy3uhz/AxvvzdweShJIp2TFPVkBOJDArRN1X";
+            }
+        };
 
         CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
             getContext(), // get the context for the current activity
@@ -85,17 +97,23 @@ public class SyncService extends IntentService {
                     break;
                 }
                 case PUTITEM: {
-                    DynamoData.putItem(credentialsProvider, (HuntItem) extras.get("hunt"), mode);
+                    DynamoData.putHunt(credentialsProvider, (HuntItem) extras.get("hunt"), mode, creds);
                     msg.arg1 = MainActivity.RESULT_OK;
                     msg.arg2 = 2;
                     break;
                 }
-                case PUTIMG: {
-                    //TODO S3 Img upload
-                    break;
-                }
                 case GETIMG: {
-                    //TODO S3 Img get
+                    HuntItem hunt = (HuntItem) extras.get("hunt");
+                    String currentEnd = extras.getString("currentEnd");
+                    //EndItem end = hunt.getHuntEnds().get(Integer.parseInt(currentEnd));
+                    //String endImg = DynamoData.getEndImg(credentialsProvider, end, currentEnd);
+                    Bundle args = new Bundle();
+                    args.putSerializable("hunt", hunt);
+                    args.putString("currentEnd", currentEnd);
+                    //args.putString("endImg", endImg);
+                    msg.obj = args;
+                    msg.arg1 = MainActivity.RESULT_OK;
+                    msg.arg2 = 3;
                     break;
                 }
                 default: {

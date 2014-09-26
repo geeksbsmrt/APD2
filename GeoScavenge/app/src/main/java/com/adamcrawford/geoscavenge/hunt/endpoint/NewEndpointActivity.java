@@ -35,9 +35,11 @@ public class NewEndpointActivity extends Activity implements NewEndpointFragment
     LocationSync lSync;
     NewEndpointFragment nef;
     String TAG = "NEA";
-    Uri fileUri;
-    Uri imageUri;
-    File photoFile;
+    Uri fileUri = null;
+    Uri imageUri = null;
+    File photoFile = null;
+    String endCity = null;
+    String endState = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,8 +120,8 @@ public class NewEndpointActivity extends Activity implements NewEndpointFragment
 
         switch (view.getId()){
             case R.id.getCurrent:{
-                nef.endLon.setText(String.valueOf(lSync.getLoc().getLongitude()));
-                nef.endLat.setText(String.valueOf(lSync.getLoc().getLatitude()));
+                nef.endLon.setText(String.valueOf(lSync.getCurrentLoc().getLongitude()));
+                nef.endLat.setText(String.valueOf(lSync.getCurrentLoc().getLatitude()));
                 lSync.quit();
                 break;
             }
@@ -127,7 +129,7 @@ public class NewEndpointActivity extends Activity implements NewEndpointFragment
                 if (Geocoder.isPresent()) {
                     lSync.init(this);
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    final LayoutInflater inflater = this.getLayoutInflater();
+                    LayoutInflater inflater = this.getLayoutInflater();
                     View v = inflater.inflate(R.layout.fragment_private_entrance, null);
                     final EditText eT = (EditText) v.findViewById(R.id.searchInput);
                     eT.setHint(R.string.addressHint);
@@ -139,8 +141,13 @@ public class NewEndpointActivity extends Activity implements NewEndpointFragment
                                     String query = eT.getText().toString();
                                     Address location = lSync.getLocationFromAddress(query, getApplicationContext());
                                     if (location != null) {
+                                        Log.e(TAG, location.toString());
                                         nef.endLat.setText(String.valueOf(location.getLatitude()));
                                         nef.endLon.setText(String.valueOf(location.getLongitude()));
+                                        endCity = location.getLocality();
+                                        endState = location.getAdminArea();
+                                        Log.e(TAG, "City: " + endCity + ", " + endState);
+
                                     } else {
                                         MainActivity.printToast(getString(R.string.notAvail));
                                     }
@@ -169,5 +176,42 @@ public class NewEndpointActivity extends Activity implements NewEndpointFragment
             }
         }
 
+    }
+
+    @Override
+    public void saveEnd() {
+        Address address = lSync.getLocation(Double.parseDouble(nef.endLat.getText().toString()),
+                Double.parseDouble(nef.endLon.getText().toString()), this);
+        EndItem endItem = new EndItem();
+        endItem.setGuesses(Integer.parseInt(nef.endGuesses.getText().toString()));
+        if (address != null) {
+            if (address.getLocality()==null){
+                endItem.setEndCity(getString(R.string.unknown));
+            } else {
+                endItem.setEndCity(address.getLocality());
+            }
+        } else {
+            endItem.setEndCity(getString(R.string.unknown));
+        }
+        Log.i(TAG, endItem.getEndCity());
+        if (address != null) {
+            if (address.getAdminArea()==null){
+                endItem.setEndState(getString(R.string.unknown));
+            } else {
+                endItem.setEndState(address.getAdminArea());
+            }
+        } else {
+            endItem.setEndCity(getString(R.string.unknown));
+        }
+        endItem.setEndDesc(nef.endDesc.getText().toString());
+        endItem.setEndLat(Double.parseDouble(nef.endLat.getText().toString()));
+        endItem.setEndLon(Double.parseDouble(nef.endLon.getText().toString()));
+//        if (imageUri != null){
+//            endItem.setEndImgStr(imageUri.toString());
+//        }
+        Intent eIntent = new Intent();
+        eIntent.putExtra("item", endItem);
+        setResult(RESULT_OK, eIntent);
+        finish();
     }
 }

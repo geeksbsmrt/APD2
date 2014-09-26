@@ -2,6 +2,7 @@ package com.adamcrawford.geoscavenge.hunt.endpoint;
 
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBAttribute;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBHashKey;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBRangeKey;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBTable;
 
 import java.io.Serializable;
@@ -11,19 +12,20 @@ import java.io.Serializable;
  * Project: GeoScavenge
  * Package: com.adamcrawford.geoscavenge.hunt.endpoint
  * File:    EndItem
- * Purpose: TODO Minimum 2 sentence description
  */
 @DynamoDBTable(tableName = "pub_hunt_ends")
 public class EndItem implements Serializable {
 
     private String huntID;
+    private String endOrder;
     private String endDesc;
     private Integer guesses;
     private String endCity;
     private double endLat;
     private double endLon;
-    private String endImg;
+//    private String endImgStr;
     private String endState;
+//    private S3Link endImg;
 
     @DynamoDBHashKey(attributeName = "huntID")
     public String getHuntID() {
@@ -31,6 +33,15 @@ public class EndItem implements Serializable {
     }
     public void setHuntID(String huntID) {
         this.huntID = huntID;
+    }
+
+    @DynamoDBAttribute(attributeName = "endOrder")
+    @DynamoDBRangeKey
+    public String getEndOrder() {
+        return endOrder;
+    }
+    public void setEndOrder(String endOrder) {
+        this.endOrder = endOrder;
     }
 
     @DynamoDBAttribute(attributeName = "endDesc")
@@ -81,11 +92,19 @@ public class EndItem implements Serializable {
         this.endState = endState;
     }
 
-    @DynamoDBAttribute(attributeName = "endImg")
-    public String getEndImg() {
-        return endImg;
-    }
-    public void setEndImg(String endImg) {
-        this.endImg = endImg;
-    }
+//    @DynamoDBIgnore
+//    public S3Link getEndImg() {
+//        return endImg;
+//    }
+//    public void setEndImg(S3Link endImg) {
+//        this.endImg = endImg;
+//    }
+
+//    @DynamoDBIgnore
+//    public String getEndImgStr() {
+//        return endImgStr;
+//    }
+//    public void setEndImgStr(String endImgStr) {
+//        this.endImgStr = endImgStr;
+//    }
 }

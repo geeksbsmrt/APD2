@@ -2,7 +2,9 @@ package com.adamcrawford.geoscavenge.hunt.endpoint;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import com.adamcrawford.geoscavenge.MainActivity;
 import com.adamcrawford.geoscavenge.R;
 
 /**
@@ -20,7 +23,6 @@ import com.adamcrawford.geoscavenge.R;
  * Project: GeoScavenge
  * Package: com.adamcrawford.geoscavenge.hunt.endpoint
  * File:    NewEndpointFragment
- * Purpose: TODO Minimum 2 sentence description
  */
 public class NewEndpointFragment extends Fragment {
     OnNewEnd parentActivity;
@@ -38,6 +40,8 @@ public class NewEndpointFragment extends Fragment {
     public interface OnNewEnd extends View.OnClickListener {
         @Override
         void onClick(View view);
+
+        void saveEnd();
     }
 
     @Override
@@ -88,10 +92,32 @@ public class NewEndpointFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home: {
-                //ask user if they want to save
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity().getApplicationContext());
+                builder.setTitle(getString(R.string.save));
+                builder.setMessage(getString(R.string.askSave));
+                builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (endDesc.getText() != null && endLat.getText() != null && endLon.getText() != null && endGuesses.getText() != null) {
+                            parentActivity.saveEnd();
+                        } else {
+                            MainActivity.printToast(getString(R.string.required));
+                        }
+                    }
+                });
+                builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        getActivity().finish();
+                    }
+                });
             }
             case R.id.action_save: {
-                getActivity().finish();
+                if (endDesc.getText() != null && endLat.getText() != null && endLon.getText() != null && endGuesses.getText() != null) {
+                    parentActivity.saveEnd();
+                } else {
+                    MainActivity.printToast(getString(R.string.required));
+                }
             }
             default: {
                 return false;

@@ -11,29 +11,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.adamcrawford.geoscavenge.R;
-import com.adamcrawford.geoscavenge.hunt.endpoint.EndItem;
-import com.adamcrawford.geoscavenge.hunt.list.HuntItem;
-
-import java.util.ArrayList;
 
 /**
  * Author:  Adam Crawford
  * Project: GeoScavenge
  * Package: com.adamcrawford.geoscavenge.hunt
  * File:    NewHuntFragment
- * Purpose: TODO Minimum 2 sentence description
  */
 public class NewHuntFragment extends Fragment {
     OnNewHunt parentActivity;
-    TextView huntNameView;
-    TextView huntDescView;
+    EditText huntNameView;
+    EditText huntDescView;
     CheckBox huntMode;
-    ArrayList<EndItem> endList;
-
+    LinearLayout numEndsContainer;
+    TextView numEnds;
 
     public NewHuntFragment() {
     }
@@ -42,7 +39,7 @@ public class NewHuntFragment extends Fragment {
         @Override
         void onClick(View view);
 
-        void saveHunt(HuntItem hunt, String mode);
+        void saveHunt();
     }
 
     @Override
@@ -63,9 +60,11 @@ public class NewHuntFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.activity_new_hunt, container, false);
         setHasOptionsMenu(true);
         ImageButton addEndButton = (ImageButton) rootView.findViewById(R.id.addEndButton);
-        huntNameView = (TextView) rootView.findViewById(R.id.newName);
-        huntDescView = (TextView) rootView.findViewById(R.id.newDesc);
+        huntNameView = (EditText) rootView.findViewById(R.id.newName);
+        huntDescView = (EditText) rootView.findViewById(R.id.newDesc);
         huntMode = (CheckBox) rootView.findViewById(R.id.newPrivate);
+        numEndsContainer = (LinearLayout) rootView.findViewById(R.id.addEndContainer);
+        numEnds = (TextView) rootView.findViewById(R.id.addNumEnds);
         addEndButton.setOnClickListener(parentActivity);
         return rootView;
     }
@@ -92,7 +91,7 @@ public class NewHuntFragment extends Fragment {
                 //ask user if they want to save
             }
             case R.id.action_save: {
-                //TODO Save hunt via parentActivity.saveHunt(hunt, mode)
+                parentActivity.saveHunt();
             }
             default: {
                 return false;
