@@ -4,4 +4,12 @@
         <item>public_profile</item>
         <item>user_friends</item>
     </string-array>
+    <string name="venueName">Venue Name</string>
+    <string name="venueLoc">Venue Location</string>
+    <string name="tempLogin">To Login Screen</string>
+    <string name="tempEnter">To Main Application</string>
+    <string name="tempDesc">This is a temporary screen that will be removed once Logins are enabled.
+    Please use the buttons below to see the login screen and enter the application.</string>
+    <string name="tempVenue">To Venue Details</string>
+    <string name="tempGame">To Game Details</string>
 </resources>

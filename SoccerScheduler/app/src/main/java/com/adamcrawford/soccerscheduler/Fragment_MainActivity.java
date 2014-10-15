@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
+import com.parse.ui.ParseLoginBuilder;
 
 /**
  * Author:  Adam Crawford
@@ -22,7 +25,33 @@ public class Fragment_MainActivity extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+        Button tempEnter = (Button) rootView.findViewById(R.id.tempEnter);
+        Button tempLogin = (Button) rootView.findViewById(R.id.tempLogin);
+
+        tempEnter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment_VenueList fvl = new Fragment_VenueList();
+                getFragmentManager().beginTransaction().replace(R.id.container, fvl).addToBackStack(null).commit();
+            }
+        });
+
+        tempLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ParseLoginBuilder builder = new ParseLoginBuilder(getActivity());
+                startActivityForResult(builder.build(), 0);
+            }
+        });
+
         return rootView;
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+
+    }
 }
