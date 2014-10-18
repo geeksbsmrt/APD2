@@ -33,6 +33,9 @@ public class Fragment_VenueList extends ListFragment {
         View rootView = inflater.inflate(R.layout.fragment_venue_list, container, false);
 
         MainActivity.actionBar.setTitle(R.string.app_name);
+        setHasOptionsMenu(true);
+        MainActivity.actionBar.setHomeButtonEnabled(false);
+        MainActivity.actionBar.setDisplayHomeAsUpEnabled(false);
         return rootView;
     }
 

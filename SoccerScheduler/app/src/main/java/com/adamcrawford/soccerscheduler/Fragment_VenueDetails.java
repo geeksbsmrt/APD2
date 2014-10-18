@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.parse.ParseQuery;
@@ -35,6 +37,9 @@ public class Fragment_VenueDetails extends ListFragment {
         View rootView = inflater.inflate(R.layout.fragment_venue_details, container, false);
 
         MainActivity.actionBar.setTitle(venue.getVenueName());
+        setHasOptionsMenu(true);
+        MainActivity.actionBar.setHomeButtonEnabled(true);
+        MainActivity.actionBar.setDisplayHomeAsUpEnabled(true);
 
         TextView venueAddress = (TextView) rootView.findViewById(R.id.fvdAddress);
         TextView venueLoc = (TextView) rootView.findViewById(R.id.fvdLocation);
@@ -88,5 +93,28 @@ public class Fragment_VenueDetails extends ListFragment {
             }
         };
         setListAdapter(gameAdapter);
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        GameItem game = gameAdapter.getItem(position);
+        Fragment_GameDetails fgd = new Fragment_GameDetails();
+        Bundle gameBundle = new Bundle();
+        gameBundle.putSerializable("venue", game);
+        fgd.setArguments(gameBundle);
+        getFragmentManager().beginTransaction().replace(R.id.container, fgd).addToBackStack(null).commit();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home: {
+                getFragmentManager().popBackStack();
+            }
+            default: {
+                return false;
+            }
+        }
     }
 }
