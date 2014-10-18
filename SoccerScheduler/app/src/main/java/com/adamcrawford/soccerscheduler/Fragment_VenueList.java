@@ -3,10 +3,10 @@ package com.adamcrawford.soccerscheduler;
 import android.app.ListFragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -32,14 +32,7 @@ public class Fragment_VenueList extends ListFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_venue_list, container, false);
 
-        Button tempVenue = (Button) rootView.findViewById(R.id.tempVenue);
-        tempVenue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Fragment_VenueDetails fvd = new Fragment_VenueDetails();
-                getFragmentManager().beginTransaction().replace(R.id.container, fvd).addToBackStack(null).commit();
-            }
-        });
+        MainActivity.actionBar.setTitle(R.string.app_name);
         return rootView;
     }
 
@@ -75,5 +68,11 @@ public class Fragment_VenueList extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         VenueItem venue = venueAdapter.getItem(position);
+        Log.i(TAG, String.valueOf(venue.getVenueFields().length()));
+        Fragment_VenueDetails fvd = new Fragment_VenueDetails();
+        Bundle venueBundle = new Bundle();
+        venueBundle.putSerializable("venue", venue);
+        fvd.setArguments(venueBundle);
+        getFragmentManager().beginTransaction().replace(R.id.container, fvd).addToBackStack(null).commit();
     }
 }
