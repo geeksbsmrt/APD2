@@ -12,4 +12,6 @@
     <string name="tempDesc">This is a temporary screen that will be removed once Logins are enabled.
     Please use the buttons below to see the login screen and enter the application.</string>
     <string name="numFields">Full size fields: </string>
+    <string name="vs">vs.</string>
+    <string name="upcoming">Upcoming games:</string>
 </resources>
