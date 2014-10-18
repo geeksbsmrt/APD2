@@ -51,7 +51,5 @@ public class Fragment_MainActivity extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 }

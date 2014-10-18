@@ -9,11 +9,13 @@
         android:layout_height="wrap_content"
         android:text="@string/venueName"
         android:id="@+id/venueListName"
+        android:layout_marginTop="5dp"
         android:textAppearance="?android:textAppearanceMedium"/>
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/venueLoc"
-        android:id="@+id/venueListLoc"/>
+        android:id="@+id/venueListLoc"
+        android:layout_marginBottom="5dp"/>
 
 </LinearLayout>
