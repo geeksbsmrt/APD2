@@ -3,5 +3,243 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+<!--DETAILS-->
+    <!--DATE-->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/gameDateDesc"
+            android:text="@string/gameDateDesc"
+            android:layout_weight="4"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="11"
+            android:id="@+id/gameDetailsDate"/>
+    </LinearLayout>
+    <!--END DATE-->
 
+    <!--HOME-->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/gameHomeDesc"
+            android:text="@string/gameHomeDesc"
+            android:layout_weight="4"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="11"
+            android:id="@+id/gameDetailsHome"/>
+    </LinearLayout>
+    <!--END HOME-->
+
+    <!--AWAY-->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/gameAwayDesc"
+            android:text="@string/gameAwayDesc"
+            android:layout_weight="4"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="11"
+            android:id="@+id/gameDetailsAway"/>
+    </LinearLayout>
+    <!--END AWAY-->
+
+    <!--FIELD-->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/gameFieldDesc"
+            android:text="@string/gameFieldDesc"
+            android:layout_weight="4"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="11"
+            android:id="@+id/gameDetailsField"/>
+    </LinearLayout>
+    <!--END FIELD-->
+<!--END DETAILS-->
+
+<!--REFEREES-->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/gameDetailsRefs"
+        android:orientation="vertical"
+        android:layout_marginTop="25dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/refHead"
+            android:textAppearance="?android:textAppearanceMedium"/>
+<!--CENTER-->
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/gameCenterDesc"
+                android:text="@string/gameCenterDesc"
+                android:layout_weight="4"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="11"
+                android:id="@+id/gameDetailsCenter"/>
+        </LinearLayout>
+<!--END CENTER-->
+
+<!--AR1-->
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/gameAR1Desc"
+                android:text="@string/gameAR1Desc"
+                android:layout_weight="4"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="11"
+                android:id="@+id/gameDetailsAR1"/>
+        </LinearLayout>
+<!--END AR1-->
+
+<!--AR2-->
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/gameAR2Desc"
+                android:text="@string/gameAR2Desc"
+                android:layout_weight="4"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="11"
+                android:id="@+id/gameDetailsAR2"/>
+        </LinearLayout>
+<!--END AR2-->
+
+<!--4th-->
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/game4thDesc"
+                android:text="@string/game4thDesc"
+                android:layout_weight="4"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="11"
+                android:id="@+id/gameDetails4th"/>
+        </LinearLayout>
+<!--END 4th-->
+    </LinearLayout>
+<!--END REFEREES-->
+
+<!--BUTTONS-->
+    <!--REFEREE BUTTONS-->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="15dp"
+        android:id="@+id/refButtons"
+        android:visibility="gone">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/refAccept"
+            android:text="@string/acceptAssignment"
+            android:layout_weight="5"
+            android:layout_margin="10dp"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/refReject"
+            android:text="@string/rejectAssignment"
+            android:layout_weight="5"
+            android:layout_margin="10dp"/>
+
+        </LinearLayout>
+    <!--END REF BUTTONS-->
+
+    <!--ASSIGN-->
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editAssignments"
+        android:text="@string/editAssignments"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
+    <!--END ASSIGN-->
+
+    <!--ADMIN BUTTONS-->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp"
+        android:id="@+id/adminButtons"
+        android:visibility="gone">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/editGame"
+            android:text="@string/editGame"
+            android:layout_weight="5"
+            android:layout_margin="10dp"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/deleteGame"
+            android:text="@string/deleteGame"
+            android:layout_weight="2"
+            android:layout_margin="10dp"/>
+
+    </LinearLayout>
+    <!--END ADMIN BUTTONS-->
+<!--END BUTTONS-->
 </LinearLayout>

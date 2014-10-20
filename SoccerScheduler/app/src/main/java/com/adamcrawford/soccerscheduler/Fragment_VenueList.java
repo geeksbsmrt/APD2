@@ -3,7 +3,6 @@ package com.adamcrawford.soccerscheduler;
 import android.app.ListFragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,7 +70,6 @@ public class Fragment_VenueList extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         VenueItem venue = venueAdapter.getItem(position);
-        Log.i(TAG, String.valueOf(venue.getVenueFields().length()));
         Fragment_VenueDetails fvd = new Fragment_VenueDetails();
         Bundle venueBundle = new Bundle();
         venueBundle.putSerializable("venue", venue);

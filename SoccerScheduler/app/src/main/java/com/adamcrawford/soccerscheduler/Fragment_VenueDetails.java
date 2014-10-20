@@ -3,7 +3,6 @@ package com.adamcrawford.soccerscheduler;
 import android.app.ListFragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,7 +26,6 @@ public class Fragment_VenueDetails extends ListFragment {
 
     private String TAG = "FVD";
     ParseQueryAdapter<GameItem> gameAdapter;
-    Bundle venueBundle;
     VenueItem venue;
 
     public Fragment_VenueDetails(){}
@@ -49,8 +47,6 @@ public class Fragment_VenueDetails extends ListFragment {
         venueLoc.setText(venue.getVenueLocation());
         venueFields.setText(String.valueOf(venue.getVenueFields().length()));
 
-        Log.i(TAG, venue.getVenueName());
-
         return rootView;
     }
 
@@ -58,8 +54,7 @@ public class Fragment_VenueDetails extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        venueBundle = getArguments();
-        venue = (VenueItem) venueBundle.get("venue");
+        venue = (VenueItem) getArguments().get("venue");
 
         ParseQueryAdapter.QueryFactory<GameItem> factory = new ParseQueryAdapter.QueryFactory<GameItem>() {
             @Override
@@ -100,7 +95,7 @@ public class Fragment_VenueDetails extends ListFragment {
         GameItem game = gameAdapter.getItem(position);
         Fragment_GameDetails fgd = new Fragment_GameDetails();
         Bundle gameBundle = new Bundle();
-        gameBundle.putSerializable("venue", game);
+        gameBundle.putSerializable("game", game);
         fgd.setArguments(gameBundle);
         getFragmentManager().beginTransaction().replace(R.id.container, fgd).addToBackStack(null).commit();
     }

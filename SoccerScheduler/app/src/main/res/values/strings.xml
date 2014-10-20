@@ -14,4 +14,18 @@
     <string name="numFields">Full size fields: </string>
     <string name="vs">vs.</string>
     <string name="upcoming">Upcoming games:</string>
+    <string name="gameDateDesc">Game Date: </string>
+    <string name="gameHomeDesc">Home Team: </string>
+    <string name="gameAwayDesc">Away Team: </string>
+    <string name="gameFieldDesc">Field #: </string>
+    <string name="gameCenterDesc">Center: </string>
+    <string name="gameAR1Desc">AR1: </string>
+    <string name="gameAR2Desc">AR2: </string>
+    <string name="game4thDesc">4th: </string>
+    <string name="refHead">Referees</string>
+    <string name="acceptAssignment">Accept Game</string>
+    <string name="rejectAssignment">Reject Game</string>
+    <string name="editGame">Edit Game</string>
+    <string name="deleteGame">Delete Game</string>
+    <string name="editAssignments">Edit Assignments</string>
 </resources>
