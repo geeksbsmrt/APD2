@@ -28,4 +28,6 @@
     <string name="editGame">Edit Game</string>
     <string name="deleteGame">Delete Game</string>
     <string name="editAssignments">Edit Assignments</string>
+    <string name="save">Save</string>
+    <string name="action_add">Add</string>
 </resources>
